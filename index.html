@@ -159,7 +159,6 @@
 
   <section id="hero">
     <div class="hero-eyebrow">实战教学大纲 · 全栈部署</div>
-    <p>天津财经大学统计学院教授  龚凤乾</p>
     <h1>从 <em>GitHub</em><br/>到 Netlify</h1>
     <p class="hero-sub">通过"从零部署一个 AI 聊天 App"，带初学者理清 GitHub 与 Netlify 协作的底层逻辑。5 个核心文件，8 课时，从写代码到全球可访问。</p>
     <div class="hero-stats">
@@ -875,12 +874,20 @@
     }
   }
 
-  fab.addEventListener('click', togglePanel);
-  closeBtn.addEventListener('click', togglePanel);
+  fab.addEventListener('click', e => {
+    e.stopPropagation();
+    togglePanel();
+  });
+  closeBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    togglePanel();
+  });
 
-  // Close on outside click
+  // Close on outside click (only when open, ignoring fab itself)
   document.addEventListener('click', e => {
-    if (isOpen && !panel.contains(e.target) && e.target !== fab) togglePanel();
+    if (isOpen && !panel.contains(e.target) && !fab.contains(e.target)) {
+      togglePanel();
+    }
   });
 
   // ── Welcome message ──
