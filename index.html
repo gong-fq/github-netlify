@@ -166,12 +166,8 @@
 <div id="main">
 
   <section id="hero">
-    <p>天津财经大学统计学院教授    龚凤乾</p>
     <div class="hero-eyebrow">实战教学大纲 · 全栈部署</div>
     <h1>从 <em>GitHub</em><br/>到 Netlify</h1>
-   
-
-
     <p class="hero-sub">通过"从零部署一个 AI 聊天 App"，带初学者理清 GitHub 与 Netlify 协作的底层逻辑。9 个核心模块，12 课时，从写代码到全球可访问。</p>
     <div class="hero-stats">
       <div class="stat"><span class="stat-num">9</span><span class="stat-label">核心模块</span></div>
@@ -1262,6 +1258,53 @@
   #ai-send:disabled { opacity: 0.35; transform: none; cursor: not-allowed; }
   #ai-send svg { width: 15px; height: 15px; fill: none; stroke: white; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
+  /* Voice buttons */
+  .ai-voice-btn {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: var(--paper); border: 1px solid var(--rule);
+    border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .ai-voice-btn svg { width: 16px; height: 16px; fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.2s; }
+  .ai-voice-btn:hover { background: var(--cream); }
+  .ai-voice-btn:hover svg { stroke: var(--accent); }
+  .ai-voice-btn.active { background: var(--accent); border-color: var(--accent); animation: voicePulse 1.5s ease-in-out infinite; }
+  .ai-voice-btn.active svg { stroke: white; }
+  @keyframes voicePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  /* TTS speaking indicator */
+  .ai-msg-bubble.speaking { position: relative; }
+  .ai-msg-bubble.speaking::after {
+    content: '🔊';
+    position: absolute; top: -4px; right: -4px;
+    font-size: 12px;
+    animation: speakerPulse 0.8s ease-in-out infinite;
+  }
+  @keyframes speakerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  /* TTS button on message hover */
+  .ai-msg.bot { position: relative; }
+  .ai-msg-tts {
+    position: absolute; top: 4px; right: -32px;
+    width: 24px; height: 24px;
+    background: var(--cream); border: 1px solid var(--rule);
+    border-radius: 6px; cursor: pointer;
+    display: none; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .ai-msg.bot:hover .ai-msg-tts { display: flex; }
+  .ai-msg-tts svg { width: 12px; height: 12px; fill: none; stroke: var(--muted); stroke-width: 2; }
+  .ai-msg-tts:hover { background: var(--accent); border-color: var(--accent); }
+  .ai-msg-tts:hover svg { stroke: white; }
+  .ai-msg-tts.speaking { display: flex; background: var(--accent); border-color: var(--accent); }
+  .ai-msg-tts.speaking svg { stroke: white; }
+
   /* ── Mobile ─────────────────────────────────────────────────── */
   @media (max-width: 500px) {
     #ai-panel { right: 12px; left: 12px; width: auto; bottom: 88px; }
@@ -1302,6 +1345,9 @@
   </div>
 
   <div id="ai-input-row">
+    <button id="ai-voice-input" class="ai-voice-btn" title="语音输入（点击说话）">
+      <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    </button>
     <textarea id="ai-input" placeholder="问我任何关于部署的问题…" rows="1"></textarea>
     <button id="ai-send" title="发送">
       <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -1341,10 +1387,56 @@
   const input    = document.getElementById('ai-input');
   const sendBtn  = document.getElementById('ai-send');
   const chips    = document.querySelectorAll('.ai-chip');
+  const voiceBtn = document.getElementById('ai-voice-input');
 
   // Conversation history sent to backend
   let history = [];
   let isOpen  = false;
+
+  // Voice features
+  let recognition = null;
+  let synthesis = window.speechSynthesis;
+  let isListening = false;
+  let currentUtterance = null;
+
+  // Initialize Speech Recognition (STT)
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.lang = 'zh-CN';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      input.value = transcript;
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+      voiceBtn.classList.remove('active');
+      isListening = false;
+      // Auto-send after voice input
+      setTimeout(() => sendMessage(transcript), 300);
+    };
+
+    recognition.onerror = (e) => {
+      console.error('语音识别错误:', e.error);
+      voiceBtn.classList.remove('active');
+      isListening = false;
+      if (e.error === 'no-speech') {
+        addErrorMsg('未检测到语音，请重试');
+      } else if (e.error === 'not-allowed') {
+        addErrorMsg('需要麦克风权限才能使用语音输入');
+      }
+    };
+
+    recognition.onend = () => {
+      voiceBtn.classList.remove('active');
+      isListening = false;
+    };
+  } else {
+    // Hide voice button if not supported
+    if (voiceBtn) voiceBtn.style.display = 'none';
+  }
 
   // System context — tells DeepSeek it's a teaching assistant for this course
   const SYSTEM = `你是本教学大纲网站的 AI 助手，专门帮助初学者理解"从 GitHub 到 Netlify 部署 AI 聊天应用"的全流程。
@@ -1388,12 +1480,27 @@
   function addBotMsg(text) {
     const row = document.createElement('div');
     row.className = 'ai-msg bot';
+    const plainText = text.replace(/\*\*(.+?)\*\*/g, '$1').replace(/`([^`]+)`/g, '$1'); // Strip markdown for TTS
     row.innerHTML = `
       <div class="ai-msg-icon">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       </div>
-      <div class="ai-msg-bubble">${formatMsg(text)}</div>`;
+      <div class="ai-msg-bubble" data-text="${escHtml(plainText)}">${formatMsg(text)}</div>
+      <button class="ai-msg-tts" title="朗读此消息">
+        <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </button>`;
     msgBox.appendChild(row);
+    
+    // Add TTS click handler
+    const ttsBtn = row.querySelector('.ai-msg-tts');
+    const bubble = row.querySelector('.ai-msg-bubble');
+    if (ttsBtn && synthesis) {
+      ttsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        speakText(bubble.dataset.text, ttsBtn, bubble);
+      });
+    }
+    
     scrollBottom();
     return row;
   }
@@ -1514,6 +1621,100 @@
   chips.forEach(c => c.addEventListener('click', () => {
     sendMessage(c.dataset.q);
   }));
+
+  // ── Voice Input (STT) ──
+  if (voiceBtn && recognition) {
+    voiceBtn.addEventListener('click', () => {
+      if (isListening) {
+        // Stop listening
+        recognition.stop();
+        voiceBtn.classList.remove('active');
+        isListening = false;
+      } else {
+        // Start listening
+        try {
+          recognition.start();
+          voiceBtn.classList.add('active');
+          isListening = true;
+        } catch (e) {
+          console.error('无法启动语音识别:', e);
+          addErrorMsg('语音识别启动失败，请检查麦克风权限');
+        }
+      }
+    });
+  }
+
+  // ── Text-to-Speech (TTS) ──
+  function speakText(text, ttsBtn, bubble) {
+    if (!synthesis) return;
+
+    // Stop current speech if any
+    if (currentUtterance) {
+      synthesis.cancel();
+      document.querySelectorAll('.ai-msg-tts.speaking').forEach(b => b.classList.remove('speaking'));
+      document.querySelectorAll('.ai-msg-bubble.speaking').forEach(b => b.classList.remove('speaking'));
+      
+      // If clicking the same button, just stop
+      if (ttsBtn.classList.contains('speaking')) {
+        ttsBtn.classList.remove('speaking');
+        bubble.classList.remove('speaking');
+        currentUtterance = null;
+        return;
+      }
+    }
+
+    // Create new utterance
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'zh-CN';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    // Find Chinese voice if available
+    const voices = synthesis.getVoices();
+    const zhVoice = voices.find(v => v.lang.startsWith('zh'));
+    if (zhVoice) utterance.voice = zhVoice;
+
+    utterance.onstart = () => {
+      ttsBtn.classList.add('speaking');
+      bubble.classList.add('speaking');
+    };
+
+    utterance.onend = () => {
+      ttsBtn.classList.remove('speaking');
+      bubble.classList.remove('speaking');
+      currentUtterance = null;
+    };
+
+    utterance.onerror = (e) => {
+      console.error('TTS 错误:', e);
+      ttsBtn.classList.remove('speaking');
+      bubble.classList.remove('speaking');
+      currentUtterance = null;
+    };
+
+    currentUtterance = utterance;
+    synthesis.speak(utterance);
+  }
+
+  // Load voices (needed for some browsers)
+  if (synthesis) {
+    if (synthesis.onvoiceschanged !== undefined) {
+      synthesis.onvoiceschanged = () => synthesis.getVoices();
+    }
+  }
+
+  // Stop speech when closing panel
+  const originalToggle = togglePanel;
+  togglePanel = function() {
+    if (isOpen && synthesis && currentUtterance) {
+      synthesis.cancel();
+      currentUtterance = null;
+      document.querySelectorAll('.ai-msg-tts.speaking').forEach(b => b.classList.remove('speaking'));
+      document.querySelectorAll('.ai-msg-bubble.speaking').forEach(b => b.classList.remove('speaking'));
+    }
+    originalToggle();
+  };
 </script>
 </body>
 </html>
