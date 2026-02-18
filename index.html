@@ -166,8 +166,8 @@
 <div id="main">
 
   <section id="hero">
-    <p>天津财经大学统计学院教授  龚凤乾</p>
     <div class="hero-eyebrow">实战教学大纲 · 全栈部署</div>
+    <p>天津财经大学统计学院教授  龚凤乾</p>
     <h1>从 <em>GitHub</em><br/>到 Netlify</h1>
     <p class="hero-sub">通过"从零部署一个 AI 聊天 App"，带初学者理清 GitHub 与 Netlify 协作的底层逻辑。9 个核心模块，12 课时，从写代码到全球可访问。</p>
     <div class="hero-stats">
@@ -1702,18 +1702,22 @@
       return;
     }
 
-    // Stop current speech if any
-    if (currentUtterance) {
+    // Check if this button is currently speaking
+    const isCurrentlySpeaking = ttsBtn.classList.contains('speaking');
+    
+    // Always stop any current speech first
+    if (synthesis.speaking || currentUtterance) {
+      console.log('⏸️ 停止当前播放');
       synthesis.cancel();
+      
+      // Clean up all speaking states
       document.querySelectorAll('.ai-msg-tts.speaking').forEach(b => b.classList.remove('speaking'));
       document.querySelectorAll('.ai-msg-bubble.speaking').forEach(b => b.classList.remove('speaking'));
+      currentUtterance = null;
       
-      // If clicking the same button, just stop
-      if (ttsBtn.classList.contains('speaking')) {
-        ttsBtn.classList.remove('speaking');
-        bubble.classList.remove('speaking');
-        currentUtterance = null;
-        console.log('⏸️ 停止播放');
+      // If clicking the same button that's playing, just stop (don't restart)
+      if (isCurrentlySpeaking) {
+        console.log('✅ 已停止播放（点击同一按钮）');
         return;
       }
     }
@@ -1754,6 +1758,13 @@
       currentUtterance = null;
     };
 
+    utterance.onpause = () => {
+      console.log('⏸️ 播放暂停');
+      ttsBtn.classList.remove('speaking');
+      bubble.classList.remove('speaking');
+      currentUtterance = null;
+    };
+
     utterance.onerror = (e) => {
       console.error('❌ TTS 错误:', e);
       ttsBtn.classList.remove('speaking');
@@ -1763,7 +1774,11 @@
 
     currentUtterance = utterance;
     console.log('🎵 开始朗读...');
-    synthesis.speak(utterance);
+    
+    // Add small delay to ensure synthesis is ready
+    setTimeout(() => {
+      synthesis.speak(utterance);
+    }, 50);
   }
 
   // Load voices (needed for some browsers)
