@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="从 GitHub 到 Netlify：全栈 AI 聊天应用部署实战教学大纲，5 个核心模块，适合零基础学员。" />
+  <meta name="description" content="从 GitHub 到 Netlify：全栈 AI 聊天应用部署实战教学大纲，9 个核心模块，适合零基础学员。" />
   <title>从 GitHub 到 Netlify · 部署实战教学大纲</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -58,6 +58,10 @@
     .mod-3 .module-title-block h2 { color: var(--accent3); }
     .mod-4 .module-title-block h2 { color: var(--gold); }
     .mod-5 .module-title-block h2 { color: #7b2d8b; }
+    .mod-6 .module-title-block h2 { color: #d97706; }
+    .mod-7 .module-title-block h2 { color: #059669; }
+    .mod-8 .module-title-block h2 { color: #dc2626; }
+    .mod-9 .module-title-block h2 { color: #7c3aed; }
     .section-h3 { font-family: var(--serif); font-size: 17px; font-weight: 600; margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 10px; }
     .section-num { font-family: var(--mono); font-size: 10px; color: var(--muted); font-weight: 400; }
     .section-h4 { font-family: var(--sans); font-size: 13.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 28px 0 12px; }
@@ -147,25 +151,31 @@
     <a href="#mod3"><span class="nav-num">03</span>netlify.toml</a>
     <a href="#mod4"><span class="nav-num">04</span>functions/chat.js</a>
     <a href="#mod5"><span class="nav-num">05</span>README.md</a>
+    <a href="#mod6"><span class="nav-num">06</span>chat.js 前端</a>
+    <a href="#mod7"><span class="nav-num">07</span>GitHub 操作</a>
+    <a href="#mod8"><span class="nav-num">08</span>部署与调试</a>
+    <a href="#mod9"><span class="nav-num">09</span>工具调用入门</a>
     <div class="nav-section">教学指南</div>
-    <a href="#schedule"><span class="nav-num">06</span>教学顺序</a>
-    <a href="#errors"><span class="nav-num">07</span>报错演示</a>
-    <a href="#challenges"><span class="nav-num">08</span>延伸挑战</a>
-    <a href="#resources"><span class="nav-num">09</span>参考资源</a>
+    <a href="#schedule"><span class="nav-num">10</span>教学顺序</a>
+    <a href="#errors"><span class="nav-num">11</span>报错演示</a>
+    <a href="#challenges"><span class="nav-num">12</span>延伸挑战</a>
+    <a href="#resources"><span class="nav-num">13</span>参考资源</a>
   </nav>
 </aside>
 
 <div id="main">
 
   <section id="hero">
+    <p>天津财经大学统计学院教授    龚凤乾</p>
     <div class="hero-eyebrow">实战教学大纲 · 全栈部署</div>
-     <p>天津财经大学统计学院教授  龚凤乾</p>
     <h1>从 <em>GitHub</em><br/>到 Netlify</h1>
-    <p class="hero-sub">通过"从零部署一个 AI 聊天 App"，带初学者理清 GitHub 与 Netlify 协作的底层逻辑。5 个核心文件，8 课时，从写代码到全球可访问。</p>
    
+
+
+    <p class="hero-sub">通过"从零部署一个 AI 聊天 App"，带初学者理清 GitHub 与 Netlify 协作的底层逻辑。9 个核心模块，12 课时，从写代码到全球可访问。</p>
     <div class="hero-stats">
-      <div class="stat"><span class="stat-num">5</span><span class="stat-label">核心模块</span></div>
-      <div class="stat"><span class="stat-num">8</span><span class="stat-label">建议课时</span></div>
+      <div class="stat"><span class="stat-num">9</span><span class="stat-label">核心模块</span></div>
+      <div class="stat"><span class="stat-num">12</span><span class="stat-label">建议课时</span></div>
       <div class="stat"><span class="stat-num">⭐⭐</span><span class="stat-label">初学者难度</span></div>
       <div class="stat"><span class="stat-num">1</span><span class="stat-label">上线 AI 应用</span></div>
     </div>
@@ -497,6 +507,480 @@
       </ul>
     </section>
 
+
+    <!-- MODULE 6 -->
+    <section class="module-section mod-6" id="mod6">
+      <div class="module-header">
+        <div class="module-num">模块 06</div>
+        <div class="module-title-block">
+          <h2>chat.js<br/>前端 JavaScript 逻辑</h2>
+          <p class="module-tagline">让页面"活"起来的灵魂代码。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>JavaScript 是网页的"大脑"，负责响应用户操作、与服务器通信、动态更新页面内容。理解 chat.js 就理解了前后端分离的精髓。</p>
+
+      <div class="section-h3"><span class="section-num">6.1</span> 前端 JavaScript 的职责</div>
+      <p class="body-text">在现代 Web 应用中，JavaScript 承担三大核心任务：</p>
+      <ul class="item-list">
+        <li><strong>事件监听</strong>：捕获用户的点击、输入、滚动等行为</li>
+        <li><strong>数据通信</strong>：通过 fetch API 向后端发送请求并接收响应</li>
+        <li><strong>DOM 操作</strong>：根据数据动态创建/修改/删除页面元素</li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">6.2</span> 核心 API：fetch() 详解</div>
+      <p class="body-text"><code>fetch()</code> 是现代浏览器内置的网络请求 API，用于与服务器通信。它返回一个 Promise，支持 async/await 语法。</p>
+      
+      <div class="section-h4">基础用法</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>步骤</th><th>代码示例</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>1. 发起请求</td><td><code>fetch('/api/chat', {method: 'POST', ...})</code></td><td>向服务器发送 HTTP 请求</td></tr>
+          <tr><td>2. 等待响应</td><td><code>const res = await fetch(...)</code></td><td>异步等待服务器返回</td></tr>
+          <tr><td>3. 解析 JSON</td><td><code>const data = await res.json()</code></td><td>将响应体解析为 JavaScript 对象</td></tr>
+          <tr><td>4. 错误处理</td><td><code>if (!res.ok) throw new Error(...)</code></td><td>检查 HTTP 状态码</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="callout info">
+        <div class="callout-title">🔍 重点理解：async/await</div>
+        <p><code>async function</code> 声明异步函数，<code>await</code> 暂停执行直到 Promise 完成。这比传统的 <code>.then().catch()</code> 链式调用更直观易读。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">6.3</span> DOM 操作三板斧</div>
+      <p class="body-text">动态更新页面内容的三个核心方法：</p>
+      <ol class="num-list">
+        <li><strong>createElement()</strong>：创建新元素 → <code>const div = document.createElement('div')</code></li>
+        <li><strong>设置属性/内容</strong>：配置元素 → <code>div.className = 'message'; div.textContent = 'Hello'</code></li>
+        <li><strong>appendChild()</strong>：插入到页面 → <code>container.appendChild(div)</code></li>
+      </ol>
+
+      <div class="callout warning">
+        <div class="callout-warning">⚠️ 安全警告：XSS 防护</div>
+        <p>永远不要用 <code>innerHTML</code> 直接插入用户输入的内容！应使用 <code>textContent</code> 或先进行 HTML 转义。否则恶意用户可注入 <code>&lt;script&gt;</code> 标签执行任意代码。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">6.4</span> 事件处理最佳实践</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>场景</th><th>推荐做法</th><th>避免的做法</th></tr></thead>
+        <tbody>
+          <tr><td>按钮点击</td><td><code>btn.addEventListener('click', handler)</code></td><td>❌ <code>&lt;button onclick="..."&gt;</code></td></tr>
+          <tr><td>表单提交</td><td><code>form.addEventListener('submit', e => e.preventDefault())</code></td><td>❌ 让浏览器默认提交（会刷新页面）</td></tr>
+          <tr><td>键盘快捷键</td><td><code>if (e.key === 'Enter' && !e.shiftKey)</code></td><td>❌ 只检查 keyCode（已废弃）</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">6.5</span> 实战：聊天消息的完整生命周期</div>
+      <ol class="num-list">
+        <li>用户在输入框输入文字，按下 Enter 键</li>
+        <li>JavaScript 监听到 <code>keydown</code> 事件，阻止默认换行行为</li>
+        <li>获取输入框内容，验证非空后清空输入框</li>
+        <li>动态创建用户消息气泡，插入到聊天容器</li>
+        <li>调用 <code>fetch()</code> 向 Serverless Function 发送请求</li>
+        <li>显示"正在输入"动画指示器</li>
+        <li>收到响应后移除动画，创建 AI 回复气泡</li>
+        <li>滚动聊天容器到底部，确保新消息可见</li>
+      </ol>
+
+      <div class="callout task">
+        <div class="callout-title">🎯 新手实践任务</div>
+        <p>在 chat.js 中添加一个"清空对话"按钮，点击后清空聊天记录（提示：<code>container.innerHTML = ''</code> 或 <code>while(el.firstChild) el.removeChild(el.firstChild)</code>）。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">6.6</span> 调试技巧</div>
+      <ul class="item-list">
+        <li><strong>Console 输出</strong>：<code>console.log()</code> 查看变量值，<code>console.error()</code> 高亮错误</li>
+        <li><strong>断点调试</strong>：浏览器 DevTools → Sources → 点击行号设置断点，逐步执行代码</li>
+        <li><strong>网络面板</strong>：DevTools → Network → 查看所有请求的状态码、响应体、耗时</li>
+        <li><strong>常见错误</strong>：<code>Uncaught TypeError: Cannot read property 'X' of null</code> → DOM 元素未找到，检查 ID 拼写</li>
+      </ul>
+    </section>
+
+    <!-- MODULE 7 -->
+    <section class="module-section mod-7" id="mod7">
+      <div class="module-header">
+        <div class="module-num">模块 07</div>
+        <div class="module-title-block">
+          <h2>GitHub 操作<br/>版本控制与协作</h2>
+          <p class="module-tagline">让代码有记忆，让团队能协作。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>Git 是程序员的"时光机"，GitHub 是代码的"社交网络"。掌握 Git/GitHub 是现代开发者的必备技能，也是 Netlify 自动化部署的前提。</p>
+
+      <div class="section-h3"><span class="section-num">7.1</span> Git 基础概念</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>概念</th><th>类比</th><th>Git 命令</th></tr></thead>
+        <tbody>
+          <tr><td>工作区</td><td>你的电脑文件夹</td><td>直接编辑文件</td></tr>
+          <tr><td>暂存区</td><td>快递打包区</td><td><code>git add</code></td></tr>
+          <tr><td>本地仓库</td><td>本地快递仓库</td><td><code>git commit</code></td></tr>
+          <tr><td>远程仓库</td><td>GitHub 云端仓库</td><td><code>git push</code></td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">7.2</span> 完整工作流（从零到推送）</div>
+      <ol class="num-list">
+        <li><strong>初始化仓库</strong>：<code>git init</code> → 在项目文件夹创建 .git 隐藏目录</li>
+        <li><strong>添加文件到暂存</strong>：<code>git add .</code> → 将所有改动标记为"待提交"</li>
+        <li><strong>提交到本地</strong>：<code>git commit -m "Initial commit"</code> → 创建版本快照</li>
+        <li><strong>关联远程仓库</strong>：<code>git remote add origin https://github.com/你的用户名/仓库名.git</code></li>
+        <li><strong>推送到 GitHub</strong>：<code>git push -u origin main</code> → 上传到云端</li>
+      </ol>
+
+      <div class="callout warning">
+        <div class="callout-title">🐛 常见错误：main vs master</div>
+        <p>GitHub 默认分支从 2020 年起改为 <code>main</code>，旧项目可能是 <code>master</code>。如遇到 <code>error: src refspec main does not match any</code>，检查分支名：<code>git branch -M main</code> 可重命名当前分支。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">7.3</span> .gitignore 文件</div>
+      <p class="body-text">告诉 Git 哪些文件<strong>不要</strong>提交到仓库（敏感信息、临时文件、依赖包）。</p>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>文件/目录</th><th>原因</th><th>.gitignore 规则</th></tr></thead>
+        <tbody>
+          <tr><td>node_modules/</td><td>体积巨大，可通过 npm install 重建</td><td><code>node_modules/</code></td></tr>
+          <tr><td>.env</td><td>包含 API Key 等敏感信息</td><td><code>.env</code></td></tr>
+          <tr><td>.DS_Store</td><td>macOS 系统文件</td><td><code>.DS_Store</code></td></tr>
+          <tr><td>dist/ 或 build/</td><td>编译产物，可重新构建</td><td><code>dist/</code></td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="callout info">
+        <div class="callout-title">💡 Pro Tip：gitignore.io</div>
+        <p>访问 <a href="https://gitignore.io" target="_blank" class="resource-link">gitignore.io</a>，输入 "Node" "macOS" "Windows" 等关键词，自动生成适合你项目的 .gitignore 模板。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">7.4</span> GitHub 关键操作</div>
+      
+      <div class="section-h4">创建新仓库（New Repository）</div>
+      <ul class="item-list">
+        <li>登录 GitHub → 右上角 "+" → New repository</li>
+        <li>填写仓库名（小写、连字符，如 <code>ai-chat-app</code>）</li>
+        <li>选择 Public（公开）或 Private（私有）</li>
+        <li>不要勾选 "Initialize with README"（本地已有代码时）</li>
+        <li>复制 HTTPS 或 SSH 地址，用于 <code>git remote add origin</code></li>
+      </ul>
+
+      <div class="section-h4">查看提交历史</div>
+      <ul class="item-list">
+        <li>仓库主页 → "X commits" 链接 → 查看所有版本记录</li>
+        <li>每个 commit 都有唯一的 SHA 哈希值（如 <code>a3f2c1b</code>）</li>
+        <li>点击 commit 可查看该版本改动了哪些文件</li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">7.5</span> 协作场景：Pull Request</div>
+      <p class="body-text">当你想为别人的项目贡献代码时的标准流程：</p>
+      <ol class="num-list">
+        <li><strong>Fork</strong>：在 GitHub 上复制别人的仓库到你的账号下</li>
+        <li><strong>Clone</strong>：把你 Fork 的仓库克隆到本地 → <code>git clone https://...</code></li>
+        <li><strong>创建分支</strong>：<code>git checkout -b feature/new-feature</code> → 避免直接改 main</li>
+        <li><strong>修改 + 提交</strong>：改代码 → <code>git add</code> → <code>git commit</code></li>
+        <li><strong>推送分支</strong>：<code>git push origin feature/new-feature</code></li>
+        <li><strong>发起 PR</strong>：在 GitHub 上点击 "Compare & pull request"，等待原作者审核</li>
+      </ol>
+
+      <div class="callout task">
+        <div class="callout-title">🎯 新手实践任务</div>
+        <p>将聊天 App 项目推送到 GitHub：创建新仓库 → 本地 git init → git add . → git commit → git remote add → git push。完成后在 GitHub 页面能看到所有文件。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">7.6</span> 常用 Git 命令速查</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>命令</th><th>作用</th><th>使用场景</th></tr></thead>
+        <tbody>
+          <tr><td><code>git status</code></td><td>查看当前状态</td><td>不确定哪些文件改了</td></tr>
+          <tr><td><code>git log</code></td><td>查看提交历史</td><td>回顾项目进展</td></tr>
+          <tr><td><code>git diff</code></td><td>查看改动详情</td><td>commit 前检查</td></tr>
+          <tr><td><code>git pull</code></td><td>从远程拉取最新代码</td><td>多人协作时同步</td></tr>
+          <tr><td><code>git clone URL</code></td><td>克隆远程仓库到本地</td><td>下载别人的项目</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- MODULE 8 -->
+    <section class="module-section mod-8" id="mod8">
+      <div class="module-header">
+        <div class="module-num">模块 08</div>
+        <div class="module-title-block">
+          <h2>部署与调试<br/>从本地到全球可访问</h2>
+          <p class="module-tagline">真正的"上线"时刻。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>部署不是终点，而是持续迭代的起点。掌握调试技巧、理解部署流程、建立监控意识，才能让应用稳定运行。</p>
+
+      <div class="section-h3"><span class="section-num">8.1</span> Netlify 自动化部署流程</div>
+      <p class="body-text">当你推送代码到 GitHub 后，Netlify 会自动触发以下流程：</p>
+      <ol class="num-list">
+        <li><strong>检测推送</strong>：GitHub Webhook 通知 Netlify "代码更新了"</li>
+        <li><strong>克隆代码</strong>：Netlify 从 GitHub 拉取最新版本到构建服务器</li>
+        <li><strong>安装依赖</strong>：执行 <code>npm install</code>（根据 package.json）</li>
+        <li><strong>运行构建</strong>：执行 netlify.toml 中的 <code>command</code>（如 <code>npm run build</code>）</li>
+        <li><strong>部署文件</strong>：将 <code>publish</code> 目录中的文件上传到 CDN</li>
+        <li><strong>部署 Functions</strong>：将 <code>functions</code> 目录部署为 Serverless 端点</li>
+        <li><strong>生成预览链接</strong>：每次部署都有唯一 URL（如 <code>https://abc123--yoursite.netlify.app</code>）</li>
+      </ol>
+
+      <div class="callout info">
+        <div class="callout-title">🔍 部署日志在哪看？</div>
+        <p>Netlify 后台 → Site overview → Deploys → 点击最新部署 → 查看完整构建日志。如果部署失败，这里会显示详细错误信息。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">8.2</span> 本地测试：netlify dev</div>
+      <p class="body-text">在推送到 GitHub 前，先在本地验证功能是否正常。<code>netlify dev</code> 可模拟完整的 Netlify 环境。</p>
+      
+      <div class="section-h4">安装 Netlify CLI</div>
+      <ul class="item-list">
+        <li><code>npm install -g netlify-cli</code> → 全局安装（只需一次）</li>
+        <li><code>netlify login</code> → 授权 CLI 访问你的 Netlify 账号</li>
+      </ul>
+
+      <div class="section-h4">启动本地开发服务器</div>
+      <ul class="item-list">
+        <li><code>netlify dev</code> → 启动服务，自动读取 netlify.toml 配置</li>
+        <li>访问 <code>http://localhost:8888</code> → 可测试前端页面</li>
+        <li>Functions 自动运行在 <code>http://localhost:8888/.netlify/functions/chat</code></li>
+        <li>支持热重载：修改代码后无需手动重启</li>
+      </ul>
+
+      <div class="callout tip">
+        <div class="callout-title">💡 环境变量的本地配置</div>
+        <p>创建 <code>.env</code> 文件（已在 .gitignore 中），写入 <code>DEEPSEEK_API_KEY=你的Key</code>。<code>netlify dev</code> 会自动读取，无需在代码里硬编码。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">8.3</span> 常见部署错误排查</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>错误类型</th><th>症状</th><th>排查步骤</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>构建失败</td>
+            <td>部署日志显示红色 ❌</td>
+            <td>查看日志最后几行错误信息 → 通常是依赖安装失败或 Node 版本不匹配</td>
+          </tr>
+          <tr>
+            <td>页面空白</td>
+            <td>部署成功但访问网站什么都没有</td>
+            <td>检查 netlify.toml 的 <code>publish</code> 目录是否正确 → 应为 "." 或 "dist"</td>
+          </tr>
+          <tr>
+            <td>Function 404</td>
+            <td>前端调用 API 返回 404</td>
+            <td>确认 <code>functions</code> 目录配置正确 → 文件名是否与 URL 匹配</td>
+          </tr>
+          <tr>
+            <td>环境变量错误</td>
+            <td>Function 返回 "API Key 未设置"</td>
+            <td>Netlify 后台检查环境变量拼写 → 重新部署生效</td>
+          </tr>
+          <tr>
+            <td>刷新 404</td>
+            <td>直接访问 /about 等路径报错</td>
+            <td>检查 netlify.toml 的 <code>[[redirects]]</code> 规则</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">8.4</span> 浏览器 DevTools 核心面板</div>
+      
+      <div class="section-h4">Console 面板</div>
+      <ul class="item-list">
+        <li>查看 JavaScript 错误（红色）和警告（黄色）</li>
+        <li>运行临时代码测试：输入 <code>document.querySelector('#ai-fab')</code> 检查元素是否存在</li>
+        <li>过滤日志：点击 "All levels" 下拉菜单，选择只显示 Errors</li>
+      </ul>
+
+      <div class="section-h4">Network 面板</div>
+      <ul class="item-list">
+        <li>查看所有网络请求：点击任一请求 → Headers 查看请求头 → Response 查看响应体</li>
+        <li>筛选请求类型：点击 "All" → 选择 XHR（AJAX 请求）或 JS（脚本文件）</li>
+        <li>模拟慢网速：Throttling → Slow 3G（测试加载状态）</li>
+        <li><strong>关键指标</strong>：Status（200 成功/404 未找到/500 服务器错误）、Time（耗时）、Size（大小）</li>
+      </ul>
+
+      <div class="section-h4">Application 面板</div>
+      <ul class="item-list">
+        <li>查看/编辑 localStorage：存储的对话历史</li>
+        <li>查看 Cookies：认证令牌等敏感信息</li>
+        <li>清除缓存：右键 "Clear site data" → 排查缓存问题</li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">8.5</span> 生产环境监控</div>
+      <p class="body-text">应用上线后，持续监控是必需的。Netlify 提供基础监控，进阶可用第三方工具。</p>
+      
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>监控维度</th><th>Netlify 内置</th><th>第三方工具（可选）</th></tr></thead>
+        <tbody>
+          <tr><td>部署状态</td><td>✅ Deploys 页面</td><td>GitHub Actions 通知</td></tr>
+          <tr><td>Function 调用次数</td><td>✅ Functions 页面</td><td>—</td></tr>
+          <tr><td>错误日志</td><td>✅ Function logs</td><td>Sentry（前端错误跟踪）</td></tr>
+          <tr><td>访问量统计</td><td>✅ Analytics（付费）</td><td>Google Analytics</td></tr>
+          <tr><td>性能监控</td><td>⚠️ 有限</td><td>Lighthouse CI / WebPageTest</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="callout task">
+        <div class="callout-title">🎯 新手实践任务</div>
+        <p>故意制造一个错误：在 netlify.toml 中将 <code>publish = "."</code> 改为 <code>publish = "dist"</code>（但项目没有 dist 目录），推送后观察 Netlify 部署日志的报错信息，然后修复并重新部署。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">8.6</span> 回滚与版本管理</div>
+      <p class="body-text">如果新版本出现严重 Bug，Netlify 支持一键回滚到任意历史版本。</p>
+      <ul class="item-list">
+        <li>Netlify 后台 → Deploys → 找到稳定的旧版本</li>
+        <li>点击右侧 "..." → "Publish deploy" → 立即回滚</li>
+        <li>Git 端也需回滚：<code>git revert HEAD</code> 或 <code>git reset --hard 上一个commit的SHA</code></li>
+      </ul>
+
+      <div class="callout warning">
+        <div class="callout-title">⚠️ 回滚注意事项</div>
+        <p>回滚只恢复代码，不会恢复数据库或用户数据。如果涉及数据库迁移，需要单独处理。本课程的聊天 App 无数据库，回滚无风险。</p>
+      </div>
+    </section>
+
+    <!-- MODULE 9 -->
+    <section class="module-section mod-9" id="mod9">
+      <div class="module-header">
+        <div class="module-num">模块 09</div>
+        <div class="module-title-block">
+          <h2>工具调用入门<br/>让 AI 拥有"超能力"</h2>
+          <p class="module-tagline">从对话到行动：Agent 时代的第一步。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>纯聊天的 AI 只能"动嘴"，工具调用让 AI 能"动手"——查天气、搜网页、读文档、发邮件。这是从 Chatbot 到 AI Agent 的关键跃升。</p>
+
+      <div class="section-h3"><span class="section-num">9.1</span> 什么是工具调用（Function Calling）？</div>
+      <p class="body-text">工具调用是 AI 模型的一种能力：当用户提出需要外部数据的问题时，AI 不会胡编乱造，而是：</p>
+      <ol class="num-list">
+        <li>识别出需要调用哪个工具（如"查天气"工具）</li>
+        <li>提取参数（如城市="北京"）</li>
+        <li>返回一个"请调用工具 X，参数为 Y"的结构化响应</li>
+        <li>你的代码执行真实的 API 调用，获取结果</li>
+        <li>将结果喂回 AI，AI 用自然语言总结给用户</li>
+      </ol>
+
+      <div class="callout info">
+        <div class="callout-title">🔍 关键理解：AI 不直接联网</div>
+        <p>DeepSeek/GPT 等模型<strong>不能</strong>自己访问互联网或数据库。工具调用是一种"协议"：AI 告诉你该调哪个 API，你的代码负责实际执行。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">9.2</span> 实战案例：天气查询工具</div>
+      
+      <div class="section-h4">第一步：定义工具描述</div>
+      <p class="body-text">在调用 DeepSeek API 时，传入工具的"说明书"（OpenAPI 格式）：</p>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>字段</th><th>作用</th><th>示例值</th></tr></thead>
+        <tbody>
+          <tr><td><code>name</code></td><td>工具的唯一标识</td><td>"get_weather"</td></tr>
+          <tr><td><code>description</code></td><td>告诉 AI 这个工具是干什么的</td><td>"获取指定城市的实时天气"</td></tr>
+          <tr><td><code>parameters</code></td><td>需要哪些参数</td><td>{ city: string, unit: "C" or "F" }</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h4">第二步：AI 决定是否调用</div>
+      <p class="body-text">用户："北京今天天气如何？" → AI 分析后返回：</p>
+      <ul class="item-list">
+        <li><code>tool_calls</code> 字段非空 → 表示需要调用工具</li>
+        <li>包含 <code>{ name: "get_weather", arguments: { city: "北京", unit: "C" } }</code></li>
+      </ul>
+
+      <div class="section-h4">第三步：执行真实 API 调用</div>
+      <p class="body-text">你的 Serverless Function 检测到 <code>tool_calls</code>，调用天气 API：</p>
+      <ul class="item-list">
+        <li>发送 HTTP 请求到 <code>https://api.openweathermap.org/data/2.5/weather?q=北京</code></li>
+        <li>收到响应：<code>{ temp: 15, condition: "晴", wind: 3 }</code></li>
+      </ul>
+
+      <div class="section-h4">第四步：结果回传给 AI</div>
+      <p class="body-text">再次调用 DeepSeek，附加工具结果：</p>
+      <ul class="item-list">
+        <li>消息列表追加一条 <code>{ role: "tool", content: "{temp:15,...}" }</code></li>
+        <li>AI 收到后生成自然语言回复："北京今天 15°C，晴朗，微风。"</li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">9.3</span> 零门槛方案：Mock 工具</div>
+      <p class="body-text">学习阶段无需真实 API Key，用假数据模拟即可理解流程。</p>
+
+      <div class="callout task">
+        <div class="callout-title">🎯 实践任务：添加 Mock 天气工具</div>
+        <p><strong>目标</strong>：修改 Serverless Function，让它识别"天气"关键词，返回假数据。<br/>
+        <strong>步骤</strong>：<br/>
+        1. 在 <code>netlify/functions/chat.js</code> 中，解析用户消息<br/>
+        2. 如果包含"天气"，返回 <code>"北京今日 15°C，晴"</code><br/>
+        3. 否则正常调用 DeepSeek<br/>
+        <strong>进阶</strong>：用正则提取城市名，支持 "上海天气" "深圳天气" 等</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">9.4</span> 进阶：真实 API 集成（OpenWeatherMap）</div>
+      
+      <div class="section-h4">获取免费 API Key</div>
+      <ol class="num-list">
+        <li>访问 <a href="https://openweathermap.org/api" target="_blank" class="resource-link">OpenWeatherMap</a></li>
+        <li>注册账号（免费）→ 进入 API Keys 页面</li>
+        <li>复制 Key（格式如 <code>abc123def456</code>）</li>
+        <li>在 Netlify 环境变量添加 <code>OPENWEATHER_API_KEY</code></li>
+      </ol>
+
+      <div class="section-h4">调用示例</div>
+      <p class="body-text">在 Serverless Function 中：</p>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>步骤</th><th>代码</th></tr></thead>
+        <tbody>
+          <tr><td>1. 构造 URL</td><td><code>const url = `https://api.openweathermap.org/...?q=${city}&appid=${key}`</code></td></tr>
+          <tr><td>2. 发起请求</td><td><code>const res = await fetch(url)</code></td></tr>
+          <tr><td>3. 解析 JSON</td><td><code>const data = await res.json()</code></td></tr>
+          <tr><td>4. 提取温度</td><td><code>const temp = (data.main.temp - 273.15).toFixed(1)</code></td></tr>
+          <tr><td>5. 返回结果</td><td><code>return `${city} 今日 ${temp}°C`</code></td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">9.5</span> 多工具场景：让 AI 自己选择</div>
+      <p class="body-text">当你定义了多个工具（天气、汇率、搜索），AI 会根据用户问题智能选择调用哪个。</p>
+
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>用户输入</th><th>AI 选择的工具</th><th>参数</th></tr></thead>
+        <tbody>
+          <tr><td>"北京天气怎么样？"</td><td>get_weather</td><td>{ city: "北京" }</td></tr>
+          <tr><td>"100 美元等于多少人民币？"</td><td>get_exchange_rate</td><td>{ from: "USD", to: "CNY" }</td></tr>
+          <tr><td>"搜索 Netlify 教程"</td><td>web_search</td><td>{ query: "Netlify 教程" }</td></tr>
+          <tr><td>"你好"</td><td>（不调用工具，直接回复）</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">9.6</span> 工具调用的最佳实践</div>
+      
+      <div class="section-h4">安全性</div>
+      <ul class="item-list">
+        <li><strong>参数验证</strong>：即使 AI 提取了参数，也要在代码里二次验证（如城市名不能包含 SQL 注入字符）</li>
+        <li><strong>权限控制</strong>：敏感工具（删除文件、发邮件）需要额外确认机制</li>
+        <li><strong>速率限制</strong>：防止用户频繁调用耗尽 API 配额</li>
+      </ul>
+
+      <div class="section-h4">用户体验</div>
+      <ul class="item-list">
+        <li><strong>加载提示</strong>：调用 API 时显示"正在查询天气..."，避免用户以为卡死</li>
+        <li><strong>降级策略</strong>：API 失败时给出友好提示，而非直接报错</li>
+        <li><strong>缓存结果</strong>：同一城市的天气 5 分钟内不重复请求</li>
+      </ul>
+
+      <div class="callout warning">
+        <div class="callout-title">⚠️ 成本控制</div>
+        <p>每次工具调用 = 2 次 AI API 调用（1 次识别工具，1 次总结结果）+ 1 次外部 API。合理设计流程，避免"调用链爆炸"（AI 调工具 A，A 的结果又触发工具 B...）。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">9.7</span> 从工具调用到 AI Agent</div>
+      <p class="body-text">工具调用是 Agent 的基石。当你掌握了基础流程，可以继续探索：</p>
+      <ul class="challenge-list">
+        <li><strong>多轮工具链</strong>：先搜索资料，再总结，再生成报告</li>
+        <li><strong>条件判断</strong>：根据工具结果决定下一步（如"天气好 → 推荐户外活动"）</li>
+        <li><strong>并行调用</strong>：同时查天气和汇率，提升效率</li>
+        <li><strong>持久化状态</strong>：记住用户常用城市，下次直接用</li>
+        <li><strong>MCP 集成</strong>：连接 Google Drive/Notion，让 AI 操作真实数据</li>
+      </ul>
+
+      <div class="ornament">✦ ✦ ✦</div>
+      <div style="text-align:center; padding: 20px 0;">
+        <p style="font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);margin-bottom:8px;">🎓 恭喜！你已掌握从静态网页到智能 Agent 的完整路径。</p>
+        <p style="color:var(--muted);font-size:13px;">接下来的挑战：尝试添加更多工具，构建属于你的个性化 AI 助手。</p>
+      </div>
+    </section>
+
     <!-- TEACHING GUIDE -->
     <section class="module-section" id="schedule">
       <div class="module-header">
@@ -511,14 +995,17 @@
       <div class="data-table-wrap"><table class="schedule-table">
         <thead><tr><th>课时</th><th>教学内容</th><th>学生产出</th></tr></thead>
         <tbody>
-          <tr><td>第 1 课时</td><td>index.html：结构 + DOM + 资源引用</td><td>完成页面基本结构，可在浏览器打开</td></tr>
-          <tr><td>第 2 课时</td><td>chat.js：DOM 操作 + fetch 基础</td><td>实现前端发送/显示消息功能</td></tr>
-          <tr><td>第 3 课时</td><td>GitHub 操作：init, commit, push</td><td>将项目推送到 GitHub 仓库</td></tr>
-          <tr><td>第 4 课时</td><td>package.json + npm 依赖管理</td><td>理解依赖安装和脚本命令</td></tr>
-          <tr><td>第 5 课时</td><td>netlify.toml + 首次部署</td><td>成功部署静态页面到 Netlify</td></tr>
-          <tr><td>第 6 课时</td><td>Serverless Function + 环境变量</td><td>AI 聊天功能完整上线</td></tr>
-          <tr><td>第 7 课时</td><td>README.md + 徽章 + 项目美化</td><td>完成完整的开源项目文档</td></tr>
-          <tr><td>第 8 课时</td><td>复盘 + 报错排查 + 扩展挑战</td><td>独立完成一个改进功能</td></tr>
+          <tr><td>第 1 课时</td><td>模块 1：index.html 页面结构</td><td>完成页面基本结构，可在浏览器打开</td></tr>
+          <tr><td>第 2 课时</td><td>模块 2：package.json 依赖管理</td><td>理解 npm 生态与脚本命令</td></tr>
+          <tr><td>第 3 课时</td><td>模块 3：netlify.toml 部署配置</td><td>掌握 TOML 格式与重定向规则</td></tr>
+          <tr><td>第 4 课时</td><td>模块 4：Serverless Function 后端</td><td>实现 AI API 安全调用</td></tr>
+          <tr><td>第 5 课时</td><td>模块 5：README.md 文档编写</td><td>完成完整的项目文档</td></tr>
+          <tr><td>第 6 课时</td><td>模块 6：chat.js 前端交互</td><td>实现完整的聊天 UI 逻辑</td></tr>
+          <tr><td>第 7 课时</td><td>模块 7：GitHub 版本控制</td><td>将项目推送到 GitHub</td></tr>
+          <tr><td>第 8 课时</td><td>模块 8：部署与调试</td><td>应用成功上线并掌握调试技巧</td></tr>
+          <tr><td>第 9～10 课时</td><td>模块 9：工具调用入门（Mock 天气）</td><td>为 AI 添加外部工具能力</td></tr>
+          <tr><td>第 11 课时</td><td>综合实战：报错排查与性能优化</td><td>独立解决 3 个预设 Bug</td></tr>
+          <tr><td>第 12 课时</td><td>毕业项目：添加自定义功能</td><td>完成一个个性化改进（主题切换/持久化/新工具等）</td></tr>
         </tbody>
       </table></div>
 
@@ -564,7 +1051,7 @@
   <footer id="site-footer">
     <div class="footer-inner">
       <div class="footer-brand">GitHub → Netlify</div>
-      <div class="footer-meta">全栈 AI 应用部署实战 · 5 模块 · 8 课时 · DeepSeek API</div>
+      <div class="footer-meta">全栈 AI 应用部署实战 · 9 模块 · 12 课时 · DeepSeek API</div>
     </div>
   </footer>
 
