@@ -1,0 +1,79 @@
+# netlify.toml — Netlify 部署配置文件
+#
+# 教学重点：
+#   把所有部署配置"代码化"，推送代码即自动生效，无需在 Netlify 后台手动点击。
+#   这就是"Infrastructure as Code（基础设施即代码）"的核心理念。
+
+# ──────────────────────────────────────────────────────────────────
+# 1. 全局构建配置（适用于所有分支）
+# ──────────────────────────────────────────────────────────────────
+[build]
+  # publish：告诉 Netlify"把哪个文件夹作为网站根目录发布"
+  # 本项目为纯静态，HTML/CSS/JS 直接在仓库根目录，所以填 "."
+  # 如果你用 React/Vue 构建，这里应改为 "dist" 或 "build"
+  publish = "."
+
+  # command：构建命令。Netlify 会在部署前执行这条命令。
+  # 纯静态项目可以留空字符串，或写一条 echo 提示信息。
+  command = "npm install"
+
+  # functions：告诉 Netlify 你的 Serverless Functions 在哪个文件夹
+  # Netlify 会自动把该目录下的每个 .js 文件变成一个独立的 API 端点
+  # 例如：netlify/functions/chat.js → /.netlify/functions/chat
+  functions = "netlify/functions"
+
+# ──────────────────────────────────────────────────────────────────
+# 2. HTTP Headers（安全与性能）
+# ──────────────────────────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # 防止网站被嵌入 iframe（点击劫持防护）
+    X-Frame-Options = "DENY"
+    # 防止 MIME 类型嗅探攻击
+    X-Content-Type-Options = "nosniff"
+    # 开启浏览器 XSS 过滤
+    X-XSS-Protection = "1; mode=block"
+
+# ──────────────────────────────────────────────────────────────────
+# 3. 重定向规则（SPA 404 终极解决方案）
+# ──────────────────────────────────────────────────────────────────
+#
+# 【教学演示：故意制造 404 再修复它！】
+# 如果你注释掉这段，然后在浏览器直接访问 /about 并刷新，
+# 就会看到 Netlify 默认的 404 页面。
+# 加上这条规则后，Netlify 会把所有"找不到"的路径都重定向到 index.html，
+# 由前端 JavaScript Router 来处理路由，而不是服务器。
+#
+# from   = 匹配的请求路径
+# to     = 重定向到的目标
+# status = 200（重写，URL 不变）vs 301/302（跳转，URL 改变）
+#
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+# ──────────────────────────────────────────────────────────────────
+# 4. 环境隔离：不同分支使用不同配置
+# ──────────────────────────────────────────────────────────────────
+
+# 生产分支（main）：正式环境配置
+[context.production]
+  command = "npm install"
+  [context.production.environment]
+    NODE_ENV = "production"
+    # 敏感的 API_KEY 不写在这里！在 Netlify 后台 Site Settings → Environment Variables 配置。
+    # 代码中通过 process.env.GEMINI_API_KEY 安全读取。
+
+# 预览分支（PR 和非 main 分支）：测试环境配置
+[context.deploy-preview]
+  command = "npm install"
+  [context.deploy-preview.environment]
+    NODE_ENV = "development"
+    # 你可以在这里设置不同的 API 端点或测试用的标志位
+    # DEBUG_MODE = "true"
+
+# 分支部署（branch-deploy）：适用于 staging、dev 等分支
+[context.branch-deploy]
+  command = "npm install"

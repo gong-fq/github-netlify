@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="从 GitHub 到 Netlify：全栈 AI 聊天应用部署实战教学大纲，9 个核心模块，适合零基础学员。" />
+  <title>从 GitHub 到 Netlify · 部署实战教学大纲</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0f0e0c; --paper: #faf8f3; --cream: #f2ede3; --rule: #d6cfc0;
+      --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a4a7a; --gold: #b8860b;
+      --muted: #7a7060; --sans: 'Noto Sans SC', sans-serif;
+      --serif: 'Noto Serif SC', serif; --mono: 'JetBrains Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: var(--paper); color: var(--ink); line-height: 1.75; font-size: 15px; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; opacity: 0.4; }
+    #progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0%; z-index: 1000; transition: width 0.1s linear; }
+    #sidebar { position: fixed; left: 0; top: 0; width: 220px; height: 100vh; background: var(--cream); border-right: 1px solid var(--rule); padding: 48px 0 24px; overflow-y: auto; z-index: 100; transition: transform 0.3s ease; }
+    #sidebar .nav-logo { padding: 0 24px 32px; border-bottom: 1px solid var(--rule); margin-bottom: 24px; }
+    #sidebar .nav-logo .logo-text { font-family: var(--serif); font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.3; }
+    #sidebar nav a { display: flex; align-items: center; gap: 10px; padding: 9px 24px; font-size: 12.5px; color: var(--muted); text-decoration: none; transition: color 0.2s, background 0.2s; border-left: 3px solid transparent; }
+    #sidebar nav a:hover, #sidebar nav a.active { color: var(--ink); background: rgba(0,0,0,0.04); border-left-color: var(--accent); }
+    #sidebar nav a .nav-num { font-family: var(--mono); font-size: 10px; color: var(--accent); font-weight: 600; min-width: 18px; }
+    #sidebar nav .nav-section { padding: 16px 24px 6px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--rule); font-weight: 500; }
+    #menu-toggle { display: none; position: fixed; top: 16px; left: 16px; z-index: 200; background: var(--accent); color: white; border: none; width: 40px; height: 40px; border-radius: 6px; cursor: pointer; font-size: 18px; align-items: center; justify-content: center; }
+    #main { margin-left: 220px; min-height: 100vh; }
+    #hero { background: var(--ink); color: var(--paper); padding: 100px 80px 80px; position: relative; overflow: hidden; }
+    #hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 400px; height: 400px; border: 1px solid rgba(255,255,255,0.06); border-radius: 50%; }
+    #hero::after { content: ''; position: absolute; bottom: -100px; right: 80px; width: 250px; height: 250px; border: 1px solid rgba(192,57,43,0.3); border-radius: 50%; }
+    .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .hero-eyebrow::before { content: ''; display: inline-block; width: 32px; height: 1px; background: var(--accent); }
+    #hero h1 { font-family: var(--serif); font-size: clamp(36px, 5vw, 62px); font-weight: 900; line-height: 1.15; letter-spacing: -0.02em; max-width: 680px; margin-bottom: 28px; }
+    #hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub { font-size: 16px; color: rgba(250,248,243,0.6); max-width: 520px; line-height: 1.65; margin-bottom: 48px; font-weight: 300; }
+    .hero-stats { display: flex; gap: 48px; flex-wrap: wrap; }
+    .stat-num { font-family: var(--mono); font-size: 28px; font-weight: 600; color: var(--paper); display: block; line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 11px; color: rgba(250,248,243,0.45); text-transform: uppercase; letter-spacing: 0.08em; }
+    .overview-strip { background: var(--accent); color: white; padding: 0 80px; }
+    .overview-grid { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid rgba(255,255,255,0.15); }
+    .overview-cell { padding: 24px 20px; border-right: 1px solid rgba(255,255,255,0.15); font-size: 13px; }
+    .overview-cell:last-child { border-right: none; }
+    .ov-label { font-family: var(--mono); font-size: 10px; opacity: 0.65; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+    .ov-val { font-weight: 500; line-height: 1.4; }
+    .content-wrap { padding: 0 80px; max-width: 900px; }
+    .module-section { padding: 80px 0; border-bottom: 1px solid var(--rule); animation: fadeUp 0.6s ease both; animation-play-state: paused; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .module-header { display: flex; align-items: flex-start; gap: 24px; margin-bottom: 48px; }
+    .module-num { font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 6px; white-space: nowrap; }
+    .module-title-block h2 { font-family: var(--serif); font-size: clamp(22px, 3vw, 32px); font-weight: 700; line-height: 1.25; margin-bottom: 12px; letter-spacing: -0.01em; }
+    .module-tagline { font-size: 14px; color: var(--muted); font-style: italic; font-family: var(--serif); }
+    .mod-1 .module-title-block h2 { color: var(--accent); }
+    .mod-2 .module-title-block h2 { color: var(--accent2); }
+    .mod-3 .module-title-block h2 { color: var(--accent3); }
+    .mod-4 .module-title-block h2 { color: var(--gold); }
+    .mod-5 .module-title-block h2 { color: #7b2d8b; }
+    .mod-6 .module-title-block h2 { color: #d97706; }
+    .mod-7 .module-title-block h2 { color: #059669; }
+    .mod-8 .module-title-block h2 { color: #dc2626; }
+    .mod-9 .module-title-block h2 { color: #7c3aed; }
+    .section-h3 { font-family: var(--serif); font-size: 17px; font-weight: 600; margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 10px; }
+    .section-num { font-family: var(--mono); font-size: 10px; color: var(--muted); font-weight: 400; }
+    .section-h4 { font-family: var(--sans); font-size: 13.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 28px 0 12px; }
+    .body-text { font-size: 14.5px; line-height: 1.8; color: #2a2520; margin-bottom: 16px; max-width: 680px; }
+    .body-text strong { font-weight: 600; color: var(--ink); }
+    .item-list { list-style: none; margin: 12px 0 20px; }
+    .item-list li { position: relative; padding: 6px 0 6px 22px; font-size: 14px; color: #2a2520; line-height: 1.65; max-width: 680px; }
+    .item-list li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-family: var(--mono); }
+    .item-list li a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .num-list { list-style: none; counter-reset: steps; margin: 12px 0 20px; }
+    .num-list li { counter-increment: steps; position: relative; padding: 8px 0 8px 40px; font-size: 14px; color: #2a2520; line-height: 1.65; border-bottom: 1px dashed var(--rule); max-width: 680px; }
+    .num-list li:last-child { border-bottom: none; }
+    .num-list li::before { content: counter(steps, decimal-leading-zero); position: absolute; left: 0; font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 600; top: 10px; }
+    .callout { border-left: 4px solid; padding: 18px 22px; margin: 28px 0; max-width: 680px; }
+    .callout-title { font-family: var(--mono); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+    .callout p { font-size: 13.5px; line-height: 1.7; }
+    .callout.task { background: rgba(44,110,73,0.06); border-color: var(--accent2); }
+    .callout.task .callout-title { color: var(--accent2); }
+    .callout.tip { background: rgba(184,134,11,0.06); border-color: var(--gold); }
+    .callout.tip .callout-title { color: var(--gold); }
+    .callout.warning { background: rgba(192,57,43,0.06); border-color: var(--accent); }
+    .callout.warning .callout-title { color: var(--accent); }
+    .callout.info { background: rgba(26,74,122,0.06); border-color: var(--accent3); }
+    .callout.info .callout-title { color: var(--accent3); }
+    .data-table-wrap { overflow-x: auto; margin: 20px 0 28px; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; max-width: 700px; }
+    .data-table th { background: var(--ink); color: var(--paper); padding: 10px 14px; text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--rule); color: #2a2520; vertical-align: top; line-height: 1.55; }
+    .data-table tr:nth-child(even) td { background: rgba(0,0,0,0.025); }
+    .data-table td code { font-family: var(--mono); font-size: 11.5px; background: rgba(0,0,0,0.07); padding: 1px 5px; border-radius: 3px; }
+    code { font-family: var(--mono); font-size: 12.5px; background: rgba(0,0,0,0.07); padding: 1px 5px; border-radius: 3px; color: var(--accent); }
+    .resource-link { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11.5px; color: var(--accent3); text-decoration: none; border-bottom: 1px solid rgba(26,74,122,0.3); padding-bottom: 1px; transition: border-color 0.2s, color 0.2s; }
+    .resource-link:hover { color: var(--accent); border-color: var(--accent); }
+    .resource-link::before { content: '↗'; font-size: 10px; }
+    .schedule-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .schedule-table th { background: var(--ink); color: var(--paper); padding: 10px 16px; text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .schedule-table td { padding: 12px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+    .schedule-table td:first-child { font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 600; white-space: nowrap; }
+    .schedule-table tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+    .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--rule); margin: 24px 0; max-width: 700px; }
+    .resource-card { background: var(--paper); padding: 20px; transition: background 0.2s; }
+    .resource-card:hover { background: var(--cream); }
+    .resource-card a { text-decoration: none; color: inherit; display: block; }
+    .rc-name { font-family: var(--serif); font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--ink); }
+    .rc-url { font-family: var(--mono); font-size: 10.5px; color: var(--accent3); margin-bottom: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rc-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+    .challenge-list { list-style: none; margin: 12px 0 20px; }
+    .challenge-list li { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--rule); font-size: 14px; max-width: 660px; }
+    .challenge-list li::before { content: '⟶'; color: var(--accent2); font-family: var(--mono); flex-shrink: 0; margin-top: 2px; }
+    .ornament { text-align: center; color: var(--rule); font-size: 20px; letter-spacing: 8px; margin: 40px 0; }
+    #site-footer { background: var(--ink); color: rgba(250,248,243,0.5); padding: 48px 80px; margin-top: 80px; font-size: 12px; }
+    .footer-inner { max-width: 900px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-brand { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--paper); }
+    .footer-meta { font-family: var(--mono); font-size: 11px; }
+    #back-top { position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; background: var(--accent); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: translateY(10px); transition: opacity 0.3s, transform 0.3s; z-index: 50; }
+    #back-top.visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 900px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #menu-toggle { display: flex; }
+      #main { margin-left: 0; }
+      #hero { padding: 80px 28px 60px; }
+      .overview-strip { padding: 0 28px; }
+      .overview-grid { grid-template-columns: repeat(2, 1fr); }
+      .content-wrap { padding: 0 28px; }
+      #site-footer { padding: 40px 28px; }
+      .hero-stats { gap: 28px; }
+    }
+    @media (max-width: 500px) { .overview-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="menu-toggle" aria-label="菜单">☰</button>
+
+<aside id="sidebar">
+  <div class="nav-logo">
+    <div class="logo-text">GitHub<br/>→ Netlify<br/>实战大纲</div>
+  </div>
+  <nav>
+    <div class="nav-section">概览</div>
+    <a href="#hero"><span class="nav-num">00</span>课程介绍</a>
+    <div class="nav-section">核心模块</div>
+    <a href="#mod1"><span class="nav-num">01</span>index.html</a>
+    <a href="#mod2"><span class="nav-num">02</span>package.json</a>
+    <a href="#mod3"><span class="nav-num">03</span>netlify.toml</a>
+    <a href="#mod4"><span class="nav-num">04</span>functions/chat.js</a>
+    <a href="#mod5"><span class="nav-num">05</span>README.md</a>
+    <a href="#mod6"><span class="nav-num">06</span>chat.js 前端</a>
+    <a href="#mod7"><span class="nav-num">07</span>GitHub 操作</a>
+    <a href="#mod8"><span class="nav-num">08</span>部署与调试</a>
+    <a href="#mod9"><span class="nav-num">09</span>工具调用入门</a>
+    <div class="nav-section">教学指南</div>
+    <a href="#schedule"><span class="nav-num">10</span>教学顺序</a>
+    <a href="#errors"><span class="nav-num">11</span>报错演示</a>
+    <a href="#challenges"><span class="nav-num">12</span>延伸挑战</a>
+    <a href="#resources"><span class="nav-num">13</span>参考资源</a>
+  </nav>
+</aside>
+
+<div id="main">
+
+  <section id="hero">
+    <p>天津财经大学统计学院教授  龚凤乾</p>
+    <div class="hero-eyebrow">实战教学大纲 · 全栈部署</div>
+    
+    <h1>从 <em>GitHub</em><br/>到 Netlify</h1>
+    <p class="hero-sub">通过"从零部署一个 AI 聊天 App"，带初学者理清 GitHub 与 Netlify 协作的底层逻辑。9 个核心模块，12 课时，从写代码到全球可访问。</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">9</span><span class="stat-label">核心模块</span></div>
+      <div class="stat"><span class="stat-num">12</span><span class="stat-label">建议课时</span></div>
+      <div class="stat"><span class="stat-num">⭐⭐</span><span class="stat-label">初学者难度</span></div>
+      <div class="stat"><span class="stat-num">1</span><span class="stat-label">上线 AI 应用</span></div>
+    </div>
+  </section>
+
+  <div class="overview-strip">
+    <div class="overview-grid">
+      <div class="overview-cell"><div class="ov-label">技术栈</div><div class="ov-val">HTML · CSS · JS · Node.js</div></div>
+      <div class="overview-cell"><div class="ov-label">部署平台</div><div class="ov-val">Netlify Serverless</div></div>
+      <div class="overview-cell"><div class="ov-label">AI 模型</div><div class="ov-val">DeepSeek API</div></div>
+      <div class="overview-cell"><div class="ov-label">先修要求</div><div class="ov-val">基础 HTML / JS 知识</div></div>
+      <div class="overview-cell"><div class="ov-label">最终产出</div><div class="ov-val">全球可访问的 AI 聊天网站</div></div>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+
+    <!-- MODULE 1 -->
+    <section class="module-section mod-1" id="mod1">
+      <div class="module-header">
+        <div class="module-num">模块 01</div>
+        <div class="module-title-block">
+          <h2>index.html<br/>应用的"门面"与骨架</h2>
+          <p class="module-tagline">所有的框架最终都会变成它。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>所有的前端框架（React、Vue、Angular）最终都会被编译成 HTML。理解 HTML 的底层结构，是理解一切 Web 应用的基础。</p>
+
+      <div class="section-h3"><span class="section-num">1.1</span> 网页的真相：什么是 HTML？</div>
+      <p class="body-text">HTML（超文本标记语言）是浏览器能直接理解的唯一语言。每个网页，无论看起来多复杂，在服务器上都是一份 <code>.html</code> 文件。</p>
+      <ul class="item-list">
+        <li>浏览器的工作流程：下载 HTML → 解析 DOM 树 → 下载 CSS/JS → 渲染页面</li>
+        <li>框架的本质：React/Vue 在运行时把组件"翻译"成 HTML 元素，最终插入到一个空的 index.html 里</li>
+        <li>推荐资源：<a class="resource-link" href="https://developer.mozilla.org/zh-CN/docs/Learn/Getting_started_with_the_web/HTML_basics" target="_blank">MDN — HTML 基础</a></li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">1.2</span> 结构拆解：&lt;head&gt; 与 &lt;body&gt;</div>
+      <div class="section-h4">&lt;head&gt;：对用户不可见，但至关重要</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>标签</th><th>作用说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;meta charset="UTF-8"&gt;</code></td><td>声明文件编码，防止中文乱码</td></tr>
+          <tr><td><code>&lt;meta name="viewport"&gt;</code></td><td>移动端适配核心：让页面在手机上正确缩放</td></tr>
+          <tr><td><code>&lt;meta name="description"&gt;</code></td><td>SEO 元数据：搜索引擎展示的网站描述</td></tr>
+          <tr><td><code>&lt;title&gt;</code></td><td>标签页标题，影响 SEO 排名和用户体验</td></tr>
+          <tr><td><code>&lt;link rel="stylesheet"&gt;</code></td><td>引入外部 CSS 文件（阻塞渲染，放在 head 里）</td></tr>
+        </tbody>
+      </table></div>
+      <div class="section-h4">&lt;body&gt;：用户看到的一切</div>
+      <ul class="item-list">
+        <li>所有可见内容（文字、图片、按钮）都写在 <code>&lt;body&gt;</code> 里</li>
+        <li><code>&lt;script&gt;</code> 标签放在 <code>&lt;/body&gt;</code> 前：确保 DOM 已加载完毕，JS 才能找到元素</li>
+        <li>语义化标签：<code>&lt;header&gt;</code>、<code>&lt;main&gt;</code>、<code>&lt;footer&gt;</code> 比 <code>&lt;div&gt;</code> 更有利于 SEO 和可访问性</li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">1.3</span> DOM 锚点：JavaScript 的"港口"</div>
+      <p class="body-text"><strong>关键概念：</strong>DOM（文档对象模型）是 HTML 在内存中的"活的"表示。JavaScript 通过 DOM API 动态修改页面内容，而无需刷新整个页面。</p>
+      <ul class="item-list">
+        <li><code>document.getElementById("chat-messages")</code> → 找到消息容器这个"港口"</li>
+        <li>JavaScript 动态创建 <code>&lt;div&gt;</code> 元素，设置内容，再 <code>appendChild</code> 到港口里</li>
+        <li>每次 AI 回复时，滚动到底部：<code>scrollTop = scrollHeight</code></li>
+      </ul>
+      <div class="callout task">
+        <div class="callout-title">🎯 新手实践任务</div>
+        <p>修改 index.html 中的 <code>&lt;title&gt;</code> 标题和 <code>#send-button</code> 按钮文字，保存后直接用浏览器打开文件（不需要服务器！），观察改动效果。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">1.4</span> 资源引用规则</div>
+      <p class="body-text">HTML 通过路径引用 CSS 和 JS 文件，路径错误是新手最常见的 Bug：</p>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>路径类型</th><th>示例</th><th>适用场景</th></tr></thead>
+        <tbody>
+          <tr><td>相对路径（同目录）</td><td><code>href="style.css"</code></td><td>最常用，推荐</td></tr>
+          <tr><td>相对路径（子目录）</td><td><code>href="assets/style.css"</code></td><td>有文件夹结构时</td></tr>
+          <tr><td>绝对路径</td><td><code>href="/style.css"</code></td><td>需要服务器，本地打开会失败</td></tr>
+          <tr><td>CDN 链接</td><td><code>href="https://..."</code></td><td>引用第三方库（Bootstrap 等）</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- MODULE 2 -->
+    <section class="module-section mod-2" id="mod2">
+      <div class="module-header">
+        <div class="module-num">模块 02</div>
+        <div class="module-title-block">
+          <h2>package.json<br/>项目的"管家"与清单</h2>
+          <p class="module-tagline">没有它，Netlify 就不知道该搬哪些砖。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>package.json 是项目的"身份证"和"购物清单"。没有它，Netlify 就不知道该为你安装哪些工具，你的项目就无法在云端运行。</p>
+
+      <div class="section-h3"><span class="section-num">2.1</span> package.json 是什么？</div>
+      <ul class="item-list">
+        <li>项目的身份：名称、版本、作者、许可证</li>
+        <li>项目的依赖：运行需要哪些第三方包</li>
+        <li>项目的脚本：开发、构建、测试用的快捷命令</li>
+      </ul>
+      <p class="body-text"><strong>生成命令：</strong>在项目文件夹中运行 <code>npm init -y</code> 可自动生成一份基础 package.json。</p>
+
+      <div class="section-h3"><span class="section-num">2.2</span> 身份信息字段</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>字段</th><th>示例值</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>"name"</code></td><td>"ai-chat-app"</td><td>包名，需小写、无空格</td></tr>
+          <tr><td><code>"version"</code></td><td>"1.0.0"</td><td>遵循语义化版本（SemVer）规范</td></tr>
+          <tr><td><code>"description"</code></td><td>"AI 聊天应用"</td><td>项目描述，发布到 npm 时显示</td></tr>
+          <tr><td><code>"private": true</code></td><td>true</td><td>防止意外发布到公开 npm 仓库</td></tr>
+          <tr><td><code>"license"</code></td><td>"MIT"</td><td>开源许可证类型</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">2.3</span> 依赖管理（Dependencies）</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>字段</th><th>安装时机</th><th>典型用途</th></tr></thead>
+        <tbody>
+          <tr><td><code>"dependencies"</code></td><td>生产 + 开发环境都安装</td><td>node-fetch（运行时需要）</td></tr>
+          <tr><td><code>"devDependencies"</code></td><td>仅开发环境安装</td><td>netlify-cli（本地调试工具）</td></tr>
+          <tr><td><code>"peerDependencies"</code></td><td>由使用者自行安装</td><td>组件库声明 React 版本要求</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="item-list">
+        <li><strong>安装生产依赖：</strong><code>npm install node-fetch</code></li>
+        <li><strong>安装开发依赖：</strong><code>npm install netlify-cli --save-dev</code></li>
+        <li><strong>同步依赖（克隆项目后）：</strong><code>npm install</code> → 读取 package.json，下载所有包</li>
+      </ul>
+      <div class="callout tip">
+        <div class="callout-title">💡 核心逻辑：本地与云端的依赖一致性</div>
+        <p>Netlify 构建时会执行 <code>npm install</code>，按照 package.json 安装相同的依赖。这保证了"本地能跑，云上也能跑"。<code>node_modules/</code> 不应上传到 GitHub（通过 .gitignore 排除）。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">2.4</span> 脚本命令（Scripts）</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>命令</th><th>触发方式</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>"build": "npm install"</code></td><td>Netlify 自动执行</td><td>Netlify 自动化构建的"开关"</td></tr>
+          <tr><td><code>"dev": "netlify dev"</code></td><td><code>npm run dev</code></td><td>启动本地开发服务器（含 Functions）</td></tr>
+          <tr><td><code>"start": "node server.js"</code></td><td><code>npm start</code></td><td>启动生产服务器（本项目不需要）</td></tr>
+        </tbody>
+      </table></div>
+      <p class="body-text">推荐资源：<a class="resource-link" href="https://docs.npmjs.com/cli/v10/configuring-npm/package-json" target="_blank">npm 官方文档 — package.json 字段完整参考</a></p>
+    </section>
+
+    <!-- MODULE 3 -->
+    <section class="module-section mod-3" id="mod3">
+      <div class="module-header">
+        <div class="module-num">模块 03</div>
+        <div class="module-title-block">
+          <h2>netlify.toml<br/>部署的"指挥官"</h2>
+          <p class="module-tagline">把后台配置写进代码里，实现真正的"一推即用"。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>把所有部署配置写进代码（Infrastructure as Code），推送代码即自动生效，消除"在我机器上没问题"的困境。</p>
+
+      <div class="section-h3"><span class="section-num">3.1</span> TOML 格式简介</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>TOML 语法</th><th>等价 JSON</th></tr></thead>
+        <tbody>
+          <tr><td><code>[section]</code></td><td><code>"section": {}</code></td></tr>
+          <tr><td><code>key = "value"</code></td><td><code>"key": "value"</code></td></tr>
+          <tr><td><code>[[array]]</code></td><td><code>"array": [{}]</code></td></tr>
+          <tr><td><code># 这是注释</code></td><td>// 不合法！JSON 不支持注释</td></tr>
+        </tbody>
+      </table></div>
+      <p class="body-text">推荐资源：<a class="resource-link" href="https://toml.io/cn/" target="_blank">TOML 官方规范（中文）</a></p>
+
+      <div class="section-h3"><span class="section-num">3.2</span> [build] 构建配置</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>配置项</th><th>示例值</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>publish</code></td><td><code>"."</code></td><td>发布哪个目录作为网站根目录（React 项目用 "dist"）</td></tr>
+          <tr><td><code>command</code></td><td><code>"npm install"</code></td><td>构建时执行的命令</td></tr>
+          <tr><td><code>functions</code></td><td><code>"netlify/functions"</code></td><td>Serverless 函数所在目录</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">3.3</span> 重定向规则（必学！）</div>
+      <p class="body-text"><strong>应用场景：</strong>SPA 的致命问题——用户刷新非首页 URL 时，Netlify 找不到对应文件，返回 404。</p>
+      <div class="callout warning">
+        <div class="callout-title">🐛 教学演示：故意制造 404，再修复它！</div>
+        <p>第一步：注释掉 <code>[[redirects]]</code> 规则并推送。<br/>第二步：浏览器访问 <code>/anything</code> 并回车，观察 404。<br/>第三步：恢复规则，再次推送验证修复。→ 比直接给答案的学习效果强 10 倍！</p>
+      </div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>参数</th><th>值</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>from</code></td><td><code>"/*"</code></td><td>匹配所有路径（通配符）</td></tr>
+          <tr><td><code>to</code></td><td><code>"/index.html"</code></td><td>重写到 index.html</td></tr>
+          <tr><td><code>status</code></td><td>200</td><td>200 = URL 不变的重写；301/302 = 跳转</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">3.4</span> 环境隔离</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>环境</th><th>netlify.toml 节</th><th>对应场景</th></tr></thead>
+        <tbody>
+          <tr><td>生产</td><td><code>[context.production]</code></td><td>main 分支合并时触发</td></tr>
+          <tr><td>预览</td><td><code>[context.deploy-preview]</code></td><td>每次 Pull Request 自动创建预览链接</td></tr>
+          <tr><td>分支部署</td><td><code>[context.branch-deploy]</code></td><td>staging、dev 等分支</td></tr>
+        </tbody>
+      </table></div>
+      <p class="body-text">推荐资源：<a class="resource-link" href="https://docs.netlify.com/configure-builds/file-based-configuration/" target="_blank">Netlify — 基于文件的构建配置完整文档</a></p>
+    </section>
+
+    <!-- MODULE 4 -->
+    <section class="module-section mod-4" id="mod4">
+      <div class="module-header">
+        <div class="module-num">模块 04</div>
+        <div class="module-title-block">
+          <h2>netlify/functions/chat.js<br/>应用的核心（Serverless）</h2>
+          <p class="module-tagline">无需服务器也能拥有强大的后端 API。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>无需购买服务器，也能拥有真正的后端 API。Netlify Functions 让你用几行代码实现一个安全的 API 端点。</p>
+
+      <div class="section-h3"><span class="section-num">4.1</span> 为什么需要 Serverless？</div>
+      <ul class="item-list">
+        <li>❌ 错误做法：<code>const apiKey = "sk-..."</code> 直接写在 chat.js 里（前端代码用户可见！）</li>
+        <li>✅ 正确做法：API Key 存在 Netlify 环境变量里，只有 Serverless Function 能读取</li>
+      </ul>
+      <div class="callout info">
+        <div class="callout-title">🔒 安全架构原则</div>
+        <p>用户浏览器 → 请求 <code>/.netlify/functions/chat</code> → Netlify 服务器（读取 <code>process.env.DEEPSEEK_API_KEY</code>）→ 调用 DeepSeek API → 返回结果给前端。全程 API Key 只在 Netlify 服务器内存中，用户永远无法看到。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">4.2</span> Serverless 的优势</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>对比维度</th><th>传统服务器</th><th>Netlify Serverless</th></tr></thead>
+        <tbody>
+          <tr><td>成本</td><td>按月付费（¥100+/月）</td><td>按调用次数计费，免费额度通常够用</td></tr>
+          <tr><td>运维</td><td>需要自己管理安全补丁、重启</td><td>完全托管，Netlify 负责一切</td></tr>
+          <tr><td>扩容</td><td>手动升级配置</td><td>自动弹性扩展</td></tr>
+          <tr><td>部署</td><td>上传文件、重启服务</td><td>推送代码自动部署</td></tr>
+          <tr><td>冷启动</td><td>一直运行</td><td>首次请求略慢（约 500ms）</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">4.3</span> 函数结构解析（exports.handler 模式）</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>参数</th><th>类型</th><th>常用属性</th></tr></thead>
+        <tbody>
+          <tr><td><code>event</code></td><td>请求对象</td><td>httpMethod, headers, body, queryStringParameters</td></tr>
+          <tr><td><code>context</code></td><td>Netlify 上下文</td><td>clientContext（通常不常用）</td></tr>
+          <tr><td>返回值</td><td>响应对象</td><td>必须包含 statusCode 和 body（字符串）</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">4.4</span> API 交互流程</div>
+      <ol class="num-list">
+        <li>前端 fetch POST 请求携带 messages 数组 → <code>/.netlify/functions/chat</code></li>
+        <li>函数解析请求体，验证格式</li>
+        <li>从 <code>process.env</code> 读取 API Key（安全！）</li>
+        <li>构造 DeepSeek 兼容格式（与 OpenAI 格式相同，无需转换）</li>
+        <li>发起 HTTPS 请求到 <code>api.deepseek.com/v1/chat/completions</code></li>
+        <li>提取回复文本，返回 JSON 响应给前端</li>
+      </ol>
+
+      <div class="section-h3"><span class="section-num">4.5</span> 环境变量的使用</div>
+      <ul class="item-list">
+        <li><strong>配置：</strong>Netlify 后台 → Site Settings → Environment Variables → 添加 <code>DEEPSEEK_API_KEY</code></li>
+        <li><strong>读取：</strong><code>const apiKey = process.env.DEEPSEEK_API_KEY;</code></li>
+        <li><strong>本地测试：</strong>创建 <code>.env</code> 文件（不要提交到 Git！），<code>netlify dev</code> 会自动读取</li>
+      </ul>
+      <p class="body-text">
+        参考资源：
+        <a class="resource-link" href="https://docs.netlify.com/functions/overview/" target="_blank">Netlify Functions 官方文档</a>
+        &nbsp;&nbsp;
+        <a class="resource-link" href="https://platform.deepseek.com/api-docs/" target="_blank">DeepSeek API 文档</a>
+      </p>
+    </section>
+
+    <!-- MODULE 5 -->
+    <section class="module-section mod-5" id="mod5">
+      <div class="module-header">
+        <div class="module-num">模块 05</div>
+        <div class="module-title-block">
+          <h2>README.md<br/>项目的"说明书"</h2>
+          <p class="module-tagline">好的文档是开源精神的灵魂，也是求职时的加分项。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>一个没有 README 的项目，就像一本没有封面和目录的书——别人不知道它是做什么的，也不知道如何使用。</p>
+
+      <div class="section-h3"><span class="section-num">5.1</span> Markdown 语法速查</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>语法</th><th>效果</th><th>场景</th></tr></thead>
+        <tbody>
+          <tr><td><code># 标题 / ## 二级</code></td><td>H1 / H2 标题</td><td>章节划分</td></tr>
+          <tr><td><code>**粗体** / *斜体*</code></td><td>粗体 / 斜体</td><td>重点强调</td></tr>
+          <tr><td><code>`代码` / ```代码块```</code></td><td>行内/块级代码</td><td>命令和代码示例</td></tr>
+          <tr><td><code>- 无序 / 1. 有序</code></td><td>列表</td><td>步骤和特性列举</td></tr>
+          <tr><td><code>[文字](URL)</code></td><td>超链接</td><td>引用外部资源</td></tr>
+          <tr><td><code>![描述](图片URL)</code></td><td>图片</td><td>截图和示意图</td></tr>
+          <tr><td><code>&gt; 引用</code></td><td>引用块</td><td>提示和警告</td></tr>
+        </tbody>
+      </table></div>
+      <p class="body-text">
+        推荐资源：
+        <a class="resource-link" href="https://markdown.com.cn/" target="_blank">Markdown 官方教程（中文）</a>
+        &nbsp;&nbsp;
+        <a class="resource-link" href="https://github.github.com/gfm/" target="_blank">GitHub Flavored Markdown 规范</a>
+      </p>
+
+      <div class="section-h3"><span class="section-num">5.2</span> 优秀 README 的必备要素</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>章节</th><th>内容说明</th><th>重要性</th></tr></thead>
+        <tbody>
+          <tr><td>项目标题 + 徽章</td><td>一句话描述 + 状态徽章</td><td>⭐⭐⭐⭐⭐</td></tr>
+          <tr><td>功能特性</td><td>用户能用它做什么</td><td>⭐⭐⭐⭐⭐</td></tr>
+          <tr><td>项目结构</td><td>文件树 + 各文件职责</td><td>⭐⭐⭐⭐</td></tr>
+          <tr><td>快速开始</td><td>克隆 → 安装 → 运行三步曲</td><td>⭐⭐⭐⭐⭐</td></tr>
+          <tr><td>部署指南</td><td>一键部署按钮 + 手动步骤</td><td>⭐⭐⭐⭐</td></tr>
+          <tr><td>环境变量</td><td>必需配置项列表</td><td>⭐⭐⭐⭐⭐</td></tr>
+          <tr><td>常见问题</td><td>FAQ：解决新用户遇到的常见 Bug</td><td>⭐⭐⭐⭐</td></tr>
+          <tr><td>许可证</td><td>MIT/Apache 等开源协议声明</td><td>⭐⭐⭐</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">5.3</span> Netlify 部署徽章</div>
+      <ul class="item-list">
+        <li><strong>部署状态徽章：</strong>Netlify 后台 → Site Overview → 找到徽章代码，复制 Markdown 格式</li>
+        <li><strong>格式：</strong><code>[![Netlify Status](badge-url)](你的部署页面URL)</code></li>
+        <li><strong>其他常见徽章：</strong><a class="resource-link" href="https://shields.io" target="_blank">Shields.io</a> 可生成许可证、版本号等各种自定义徽章</li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">5.4</span> 求职加分：开源项目展示技巧</div>
+      <ul class="item-list">
+        <li>README 中加入效果截图或 GIF 动图，让面试官一秒理解项目价值</li>
+        <li>技术选型说明：为什么选 Netlify 而非 Vercel？为什么用 Serverless？</li>
+        <li>遇到的挑战和解决方案：体现学习深度（比如 API Key 安全问题的解决过程）</li>
+        <li>项目数据：访问量、AI 调用次数（如果可以展示的话）</li>
+      </ul>
+    </section>
+
+
+    <!-- MODULE 6 -->
+    <section class="module-section mod-6" id="mod6">
+      <div class="module-header">
+        <div class="module-num">模块 06</div>
+        <div class="module-title-block">
+          <h2>chat.js<br/>前端 JavaScript 逻辑</h2>
+          <p class="module-tagline">让页面"活"起来的灵魂代码。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>JavaScript 是网页的"大脑"，负责响应用户操作、与服务器通信、动态更新页面内容。理解 chat.js 就理解了前后端分离的精髓。</p>
+
+      <div class="section-h3"><span class="section-num">6.1</span> 前端 JavaScript 的职责</div>
+      <p class="body-text">在现代 Web 应用中，JavaScript 承担三大核心任务：</p>
+      <ul class="item-list">
+        <li><strong>事件监听</strong>：捕获用户的点击、输入、滚动等行为</li>
+        <li><strong>数据通信</strong>：通过 fetch API 向后端发送请求并接收响应</li>
+        <li><strong>DOM 操作</strong>：根据数据动态创建/修改/删除页面元素</li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">6.2</span> 核心 API：fetch() 详解</div>
+      <p class="body-text"><code>fetch()</code> 是现代浏览器内置的网络请求 API，用于与服务器通信。它返回一个 Promise，支持 async/await 语法。</p>
+      
+      <div class="section-h4">基础用法</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>步骤</th><th>代码示例</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>1. 发起请求</td><td><code>fetch('/api/chat', {method: 'POST', ...})</code></td><td>向服务器发送 HTTP 请求</td></tr>
+          <tr><td>2. 等待响应</td><td><code>const res = await fetch(...)</code></td><td>异步等待服务器返回</td></tr>
+          <tr><td>3. 解析 JSON</td><td><code>const data = await res.json()</code></td><td>将响应体解析为 JavaScript 对象</td></tr>
+          <tr><td>4. 错误处理</td><td><code>if (!res.ok) throw new Error(...)</code></td><td>检查 HTTP 状态码</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="callout info">
+        <div class="callout-title">🔍 重点理解：async/await</div>
+        <p><code>async function</code> 声明异步函数，<code>await</code> 暂停执行直到 Promise 完成。这比传统的 <code>.then().catch()</code> 链式调用更直观易读。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">6.3</span> DOM 操作三板斧</div>
+      <p class="body-text">动态更新页面内容的三个核心方法：</p>
+      <ol class="num-list">
+        <li><strong>createElement()</strong>：创建新元素 → <code>const div = document.createElement('div')</code></li>
+        <li><strong>设置属性/内容</strong>：配置元素 → <code>div.className = 'message'; div.textContent = 'Hello'</code></li>
+        <li><strong>appendChild()</strong>：插入到页面 → <code>container.appendChild(div)</code></li>
+      </ol>
+
+      <div class="callout warning">
+        <div class="callout-warning">⚠️ 安全警告：XSS 防护</div>
+        <p>永远不要用 <code>innerHTML</code> 直接插入用户输入的内容！应使用 <code>textContent</code> 或先进行 HTML 转义。否则恶意用户可注入 <code>&lt;script&gt;</code> 标签执行任意代码。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">6.4</span> 事件处理最佳实践</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>场景</th><th>推荐做法</th><th>避免的做法</th></tr></thead>
+        <tbody>
+          <tr><td>按钮点击</td><td><code>btn.addEventListener('click', handler)</code></td><td>❌ <code>&lt;button onclick="..."&gt;</code></td></tr>
+          <tr><td>表单提交</td><td><code>form.addEventListener('submit', e => e.preventDefault())</code></td><td>❌ 让浏览器默认提交（会刷新页面）</td></tr>
+          <tr><td>键盘快捷键</td><td><code>if (e.key === 'Enter' && !e.shiftKey)</code></td><td>❌ 只检查 keyCode（已废弃）</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">6.5</span> 实战：聊天消息的完整生命周期</div>
+      <ol class="num-list">
+        <li>用户在输入框输入文字，按下 Enter 键</li>
+        <li>JavaScript 监听到 <code>keydown</code> 事件，阻止默认换行行为</li>
+        <li>获取输入框内容，验证非空后清空输入框</li>
+        <li>动态创建用户消息气泡，插入到聊天容器</li>
+        <li>调用 <code>fetch()</code> 向 Serverless Function 发送请求</li>
+        <li>显示"正在输入"动画指示器</li>
+        <li>收到响应后移除动画，创建 AI 回复气泡</li>
+        <li>滚动聊天容器到底部，确保新消息可见</li>
+      </ol>
+
+      <div class="callout task">
+        <div class="callout-title">🎯 新手实践任务</div>
+        <p>在 chat.js 中添加一个"清空对话"按钮，点击后清空聊天记录（提示：<code>container.innerHTML = ''</code> 或 <code>while(el.firstChild) el.removeChild(el.firstChild)</code>）。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">6.6</span> 调试技巧</div>
+      <ul class="item-list">
+        <li><strong>Console 输出</strong>：<code>console.log()</code> 查看变量值，<code>console.error()</code> 高亮错误</li>
+        <li><strong>断点调试</strong>：浏览器 DevTools → Sources → 点击行号设置断点，逐步执行代码</li>
+        <li><strong>网络面板</strong>：DevTools → Network → 查看所有请求的状态码、响应体、耗时</li>
+        <li><strong>常见错误</strong>：<code>Uncaught TypeError: Cannot read property 'X' of null</code> → DOM 元素未找到，检查 ID 拼写</li>
+      </ul>
+    </section>
+
+    <!-- MODULE 7 -->
+    <section class="module-section mod-7" id="mod7">
+      <div class="module-header">
+        <div class="module-num">模块 07</div>
+        <div class="module-title-block">
+          <h2>GitHub 操作<br/>版本控制与协作</h2>
+          <p class="module-tagline">让代码有记忆，让团队能协作。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>Git 是程序员的"时光机"，GitHub 是代码的"社交网络"。掌握 Git/GitHub 是现代开发者的必备技能，也是 Netlify 自动化部署的前提。</p>
+
+      <div class="section-h3"><span class="section-num">7.1</span> Git 基础概念</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>概念</th><th>类比</th><th>Git 命令</th></tr></thead>
+        <tbody>
+          <tr><td>工作区</td><td>你的电脑文件夹</td><td>直接编辑文件</td></tr>
+          <tr><td>暂存区</td><td>快递打包区</td><td><code>git add</code></td></tr>
+          <tr><td>本地仓库</td><td>本地快递仓库</td><td><code>git commit</code></td></tr>
+          <tr><td>远程仓库</td><td>GitHub 云端仓库</td><td><code>git push</code></td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">7.2</span> 完整工作流（从零到推送）</div>
+      <ol class="num-list">
+        <li><strong>初始化仓库</strong>：<code>git init</code> → 在项目文件夹创建 .git 隐藏目录</li>
+        <li><strong>添加文件到暂存</strong>：<code>git add .</code> → 将所有改动标记为"待提交"</li>
+        <li><strong>提交到本地</strong>：<code>git commit -m "Initial commit"</code> → 创建版本快照</li>
+        <li><strong>关联远程仓库</strong>：<code>git remote add origin https://github.com/你的用户名/仓库名.git</code></li>
+        <li><strong>推送到 GitHub</strong>：<code>git push -u origin main</code> → 上传到云端</li>
+      </ol>
+
+      <div class="callout warning">
+        <div class="callout-title">🐛 常见错误：main vs master</div>
+        <p>GitHub 默认分支从 2020 年起改为 <code>main</code>，旧项目可能是 <code>master</code>。如遇到 <code>error: src refspec main does not match any</code>，检查分支名：<code>git branch -M main</code> 可重命名当前分支。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">7.3</span> .gitignore 文件</div>
+      <p class="body-text">告诉 Git 哪些文件<strong>不要</strong>提交到仓库（敏感信息、临时文件、依赖包）。</p>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>文件/目录</th><th>原因</th><th>.gitignore 规则</th></tr></thead>
+        <tbody>
+          <tr><td>node_modules/</td><td>体积巨大，可通过 npm install 重建</td><td><code>node_modules/</code></td></tr>
+          <tr><td>.env</td><td>包含 API Key 等敏感信息</td><td><code>.env</code></td></tr>
+          <tr><td>.DS_Store</td><td>macOS 系统文件</td><td><code>.DS_Store</code></td></tr>
+          <tr><td>dist/ 或 build/</td><td>编译产物，可重新构建</td><td><code>dist/</code></td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="callout info">
+        <div class="callout-title">💡 Pro Tip：gitignore.io</div>
+        <p>访问 <a href="https://gitignore.io" target="_blank" class="resource-link">gitignore.io</a>，输入 "Node" "macOS" "Windows" 等关键词，自动生成适合你项目的 .gitignore 模板。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">7.4</span> GitHub 关键操作</div>
+      
+      <div class="section-h4">创建新仓库（New Repository）</div>
+      <ul class="item-list">
+        <li>登录 GitHub → 右上角 "+" → New repository</li>
+        <li>填写仓库名（小写、连字符，如 <code>ai-chat-app</code>）</li>
+        <li>选择 Public（公开）或 Private（私有）</li>
+        <li>不要勾选 "Initialize with README"（本地已有代码时）</li>
+        <li>复制 HTTPS 或 SSH 地址，用于 <code>git remote add origin</code></li>
+      </ul>
+
+      <div class="section-h4">查看提交历史</div>
+      <ul class="item-list">
+        <li>仓库主页 → "X commits" 链接 → 查看所有版本记录</li>
+        <li>每个 commit 都有唯一的 SHA 哈希值（如 <code>a3f2c1b</code>）</li>
+        <li>点击 commit 可查看该版本改动了哪些文件</li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">7.5</span> 协作场景：Pull Request</div>
+      <p class="body-text">当你想为别人的项目贡献代码时的标准流程：</p>
+      <ol class="num-list">
+        <li><strong>Fork</strong>：在 GitHub 上复制别人的仓库到你的账号下</li>
+        <li><strong>Clone</strong>：把你 Fork 的仓库克隆到本地 → <code>git clone https://...</code></li>
+        <li><strong>创建分支</strong>：<code>git checkout -b feature/new-feature</code> → 避免直接改 main</li>
+        <li><strong>修改 + 提交</strong>：改代码 → <code>git add</code> → <code>git commit</code></li>
+        <li><strong>推送分支</strong>：<code>git push origin feature/new-feature</code></li>
+        <li><strong>发起 PR</strong>：在 GitHub 上点击 "Compare & pull request"，等待原作者审核</li>
+      </ol>
+
+      <div class="callout task">
+        <div class="callout-title">🎯 新手实践任务</div>
+        <p>将聊天 App 项目推送到 GitHub：创建新仓库 → 本地 git init → git add . → git commit → git remote add → git push。完成后在 GitHub 页面能看到所有文件。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">7.6</span> 常用 Git 命令速查</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>命令</th><th>作用</th><th>使用场景</th></tr></thead>
+        <tbody>
+          <tr><td><code>git status</code></td><td>查看当前状态</td><td>不确定哪些文件改了</td></tr>
+          <tr><td><code>git log</code></td><td>查看提交历史</td><td>回顾项目进展</td></tr>
+          <tr><td><code>git diff</code></td><td>查看改动详情</td><td>commit 前检查</td></tr>
+          <tr><td><code>git pull</code></td><td>从远程拉取最新代码</td><td>多人协作时同步</td></tr>
+          <tr><td><code>git clone URL</code></td><td>克隆远程仓库到本地</td><td>下载别人的项目</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- MODULE 8 -->
+    <section class="module-section mod-8" id="mod8">
+      <div class="module-header">
+        <div class="module-num">模块 08</div>
+        <div class="module-title-block">
+          <h2>部署与调试<br/>从本地到全球可访问</h2>
+          <p class="module-tagline">真正的"上线"时刻。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>部署不是终点，而是持续迭代的起点。掌握调试技巧、理解部署流程、建立监控意识，才能让应用稳定运行。</p>
+
+      <div class="section-h3"><span class="section-num">8.1</span> Netlify 自动化部署流程</div>
+      <p class="body-text">当你推送代码到 GitHub 后，Netlify 会自动触发以下流程：</p>
+      <ol class="num-list">
+        <li><strong>检测推送</strong>：GitHub Webhook 通知 Netlify "代码更新了"</li>
+        <li><strong>克隆代码</strong>：Netlify 从 GitHub 拉取最新版本到构建服务器</li>
+        <li><strong>安装依赖</strong>：执行 <code>npm install</code>（根据 package.json）</li>
+        <li><strong>运行构建</strong>：执行 netlify.toml 中的 <code>command</code>（如 <code>npm run build</code>）</li>
+        <li><strong>部署文件</strong>：将 <code>publish</code> 目录中的文件上传到 CDN</li>
+        <li><strong>部署 Functions</strong>：将 <code>functions</code> 目录部署为 Serverless 端点</li>
+        <li><strong>生成预览链接</strong>：每次部署都有唯一 URL（如 <code>https://abc123--yoursite.netlify.app</code>）</li>
+      </ol>
+
+      <div class="callout info">
+        <div class="callout-title">🔍 部署日志在哪看？</div>
+        <p>Netlify 后台 → Site overview → Deploys → 点击最新部署 → 查看完整构建日志。如果部署失败，这里会显示详细错误信息。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">8.2</span> 本地测试：netlify dev</div>
+      <p class="body-text">在推送到 GitHub 前，先在本地验证功能是否正常。<code>netlify dev</code> 可模拟完整的 Netlify 环境。</p>
+      
+      <div class="section-h4">安装 Netlify CLI</div>
+      <ul class="item-list">
+        <li><code>npm install -g netlify-cli</code> → 全局安装（只需一次）</li>
+        <li><code>netlify login</code> → 授权 CLI 访问你的 Netlify 账号</li>
+      </ul>
+
+      <div class="section-h4">启动本地开发服务器</div>
+      <ul class="item-list">
+        <li><code>netlify dev</code> → 启动服务，自动读取 netlify.toml 配置</li>
+        <li>访问 <code>http://localhost:8888</code> → 可测试前端页面</li>
+        <li>Functions 自动运行在 <code>http://localhost:8888/.netlify/functions/chat</code></li>
+        <li>支持热重载：修改代码后无需手动重启</li>
+      </ul>
+
+      <div class="callout tip">
+        <div class="callout-title">💡 环境变量的本地配置</div>
+        <p>创建 <code>.env</code> 文件（已在 .gitignore 中），写入 <code>DEEPSEEK_API_KEY=你的Key</code>。<code>netlify dev</code> 会自动读取，无需在代码里硬编码。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">8.3</span> 常见部署错误排查</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>错误类型</th><th>症状</th><th>排查步骤</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>构建失败</td>
+            <td>部署日志显示红色 ❌</td>
+            <td>查看日志最后几行错误信息 → 通常是依赖安装失败或 Node 版本不匹配</td>
+          </tr>
+          <tr>
+            <td>页面空白</td>
+            <td>部署成功但访问网站什么都没有</td>
+            <td>检查 netlify.toml 的 <code>publish</code> 目录是否正确 → 应为 "." 或 "dist"</td>
+          </tr>
+          <tr>
+            <td>Function 404</td>
+            <td>前端调用 API 返回 404</td>
+            <td>确认 <code>functions</code> 目录配置正确 → 文件名是否与 URL 匹配</td>
+          </tr>
+          <tr>
+            <td>环境变量错误</td>
+            <td>Function 返回 "API Key 未设置"</td>
+            <td>Netlify 后台检查环境变量拼写 → 重新部署生效</td>
+          </tr>
+          <tr>
+            <td>刷新 404</td>
+            <td>直接访问 /about 等路径报错</td>
+            <td>检查 netlify.toml 的 <code>[[redirects]]</code> 规则</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">8.4</span> 浏览器 DevTools 核心面板</div>
+      
+      <div class="section-h4">Console 面板</div>
+      <ul class="item-list">
+        <li>查看 JavaScript 错误（红色）和警告（黄色）</li>
+        <li>运行临时代码测试：输入 <code>document.querySelector('#ai-fab')</code> 检查元素是否存在</li>
+        <li>过滤日志：点击 "All levels" 下拉菜单，选择只显示 Errors</li>
+      </ul>
+
+      <div class="section-h4">Network 面板</div>
+      <ul class="item-list">
+        <li>查看所有网络请求：点击任一请求 → Headers 查看请求头 → Response 查看响应体</li>
+        <li>筛选请求类型：点击 "All" → 选择 XHR（AJAX 请求）或 JS（脚本文件）</li>
+        <li>模拟慢网速：Throttling → Slow 3G（测试加载状态）</li>
+        <li><strong>关键指标</strong>：Status（200 成功/404 未找到/500 服务器错误）、Time（耗时）、Size（大小）</li>
+      </ul>
+
+      <div class="section-h4">Application 面板</div>
+      <ul class="item-list">
+        <li>查看/编辑 localStorage：存储的对话历史</li>
+        <li>查看 Cookies：认证令牌等敏感信息</li>
+        <li>清除缓存：右键 "Clear site data" → 排查缓存问题</li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">8.5</span> 生产环境监控</div>
+      <p class="body-text">应用上线后，持续监控是必需的。Netlify 提供基础监控，进阶可用第三方工具。</p>
+      
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>监控维度</th><th>Netlify 内置</th><th>第三方工具（可选）</th></tr></thead>
+        <tbody>
+          <tr><td>部署状态</td><td>✅ Deploys 页面</td><td>GitHub Actions 通知</td></tr>
+          <tr><td>Function 调用次数</td><td>✅ Functions 页面</td><td>—</td></tr>
+          <tr><td>错误日志</td><td>✅ Function logs</td><td>Sentry（前端错误跟踪）</td></tr>
+          <tr><td>访问量统计</td><td>✅ Analytics（付费）</td><td>Google Analytics</td></tr>
+          <tr><td>性能监控</td><td>⚠️ 有限</td><td>Lighthouse CI / WebPageTest</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="callout task">
+        <div class="callout-title">🎯 新手实践任务</div>
+        <p>故意制造一个错误：在 netlify.toml 中将 <code>publish = "."</code> 改为 <code>publish = "dist"</code>（但项目没有 dist 目录），推送后观察 Netlify 部署日志的报错信息，然后修复并重新部署。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">8.6</span> 回滚与版本管理</div>
+      <p class="body-text">如果新版本出现严重 Bug，Netlify 支持一键回滚到任意历史版本。</p>
+      <ul class="item-list">
+        <li>Netlify 后台 → Deploys → 找到稳定的旧版本</li>
+        <li>点击右侧 "..." → "Publish deploy" → 立即回滚</li>
+        <li>Git 端也需回滚：<code>git revert HEAD</code> 或 <code>git reset --hard 上一个commit的SHA</code></li>
+      </ul>
+
+      <div class="callout warning">
+        <div class="callout-title">⚠️ 回滚注意事项</div>
+        <p>回滚只恢复代码，不会恢复数据库或用户数据。如果涉及数据库迁移，需要单独处理。本课程的聊天 App 无数据库，回滚无风险。</p>
+      </div>
+    </section>
+
+    <!-- MODULE 9 -->
+    <section class="module-section mod-9" id="mod9">
+      <div class="module-header">
+        <div class="module-num">模块 09</div>
+        <div class="module-title-block">
+          <h2>工具调用入门<br/>让 AI 拥有"超能力"</h2>
+          <p class="module-tagline">从对话到行动：Agent 时代的第一步。</p>
+        </div>
+      </div>
+      <p class="body-text"><strong>核心理念：</strong>纯聊天的 AI 只能"动嘴"，工具调用让 AI 能"动手"——查天气、搜网页、读文档、发邮件。这是从 Chatbot 到 AI Agent 的关键跃升。</p>
+
+      <div class="section-h3"><span class="section-num">9.1</span> 什么是工具调用（Function Calling）？</div>
+      <p class="body-text">工具调用是 AI 模型的一种能力：当用户提出需要外部数据的问题时，AI 不会胡编乱造，而是：</p>
+      <ol class="num-list">
+        <li>识别出需要调用哪个工具（如"查天气"工具）</li>
+        <li>提取参数（如城市="北京"）</li>
+        <li>返回一个"请调用工具 X，参数为 Y"的结构化响应</li>
+        <li>你的代码执行真实的 API 调用，获取结果</li>
+        <li>将结果喂回 AI，AI 用自然语言总结给用户</li>
+      </ol>
+
+      <div class="callout info">
+        <div class="callout-title">🔍 关键理解：AI 不直接联网</div>
+        <p>DeepSeek/GPT 等模型<strong>不能</strong>自己访问互联网或数据库。工具调用是一种"协议"：AI 告诉你该调哪个 API，你的代码负责实际执行。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">9.2</span> 实战案例：天气查询工具</div>
+      
+      <div class="section-h4">第一步：定义工具描述</div>
+      <p class="body-text">在调用 DeepSeek API 时，传入工具的"说明书"（OpenAPI 格式）：</p>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>字段</th><th>作用</th><th>示例值</th></tr></thead>
+        <tbody>
+          <tr><td><code>name</code></td><td>工具的唯一标识</td><td>"get_weather"</td></tr>
+          <tr><td><code>description</code></td><td>告诉 AI 这个工具是干什么的</td><td>"获取指定城市的实时天气"</td></tr>
+          <tr><td><code>parameters</code></td><td>需要哪些参数</td><td>{ city: string, unit: "C" or "F" }</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h4">第二步：AI 决定是否调用</div>
+      <p class="body-text">用户："北京今天天气如何？" → AI 分析后返回：</p>
+      <ul class="item-list">
+        <li><code>tool_calls</code> 字段非空 → 表示需要调用工具</li>
+        <li>包含 <code>{ name: "get_weather", arguments: { city: "北京", unit: "C" } }</code></li>
+      </ul>
+
+      <div class="section-h4">第三步：执行真实 API 调用</div>
+      <p class="body-text">你的 Serverless Function 检测到 <code>tool_calls</code>，调用天气 API：</p>
+      <ul class="item-list">
+        <li>发送 HTTP 请求到 <code>https://api.openweathermap.org/data/2.5/weather?q=北京</code></li>
+        <li>收到响应：<code>{ temp: 15, condition: "晴", wind: 3 }</code></li>
+      </ul>
+
+      <div class="section-h4">第四步：结果回传给 AI</div>
+      <p class="body-text">再次调用 DeepSeek，附加工具结果：</p>
+      <ul class="item-list">
+        <li>消息列表追加一条 <code>{ role: "tool", content: "{temp:15,...}" }</code></li>
+        <li>AI 收到后生成自然语言回复："北京今天 15°C，晴朗，微风。"</li>
+      </ul>
+
+      <div class="section-h3"><span class="section-num">9.3</span> 零门槛方案：Mock 工具</div>
+      <p class="body-text">学习阶段无需真实 API Key，用假数据模拟即可理解流程。</p>
+
+      <div class="callout task">
+        <div class="callout-title">🎯 实践任务：添加 Mock 天气工具</div>
+        <p><strong>目标</strong>：修改 Serverless Function，让它识别"天气"关键词，返回假数据。<br/>
+        <strong>步骤</strong>：<br/>
+        1. 在 <code>netlify/functions/chat.js</code> 中，解析用户消息<br/>
+        2. 如果包含"天气"，返回 <code>"北京今日 15°C，晴"</code><br/>
+        3. 否则正常调用 DeepSeek<br/>
+        <strong>进阶</strong>：用正则提取城市名，支持 "上海天气" "深圳天气" 等</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">9.4</span> 进阶：真实 API 集成（OpenWeatherMap）</div>
+      
+      <div class="section-h4">获取免费 API Key</div>
+      <ol class="num-list">
+        <li>访问 <a href="https://openweathermap.org/api" target="_blank" class="resource-link">OpenWeatherMap</a></li>
+        <li>注册账号（免费）→ 进入 API Keys 页面</li>
+        <li>复制 Key（格式如 <code>abc123def456</code>）</li>
+        <li>在 Netlify 环境变量添加 <code>OPENWEATHER_API_KEY</code></li>
+      </ol>
+
+      <div class="section-h4">调用示例</div>
+      <p class="body-text">在 Serverless Function 中：</p>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>步骤</th><th>代码</th></tr></thead>
+        <tbody>
+          <tr><td>1. 构造 URL</td><td><code>const url = `https://api.openweathermap.org/...?q=${city}&appid=${key}`</code></td></tr>
+          <tr><td>2. 发起请求</td><td><code>const res = await fetch(url)</code></td></tr>
+          <tr><td>3. 解析 JSON</td><td><code>const data = await res.json()</code></td></tr>
+          <tr><td>4. 提取温度</td><td><code>const temp = (data.main.temp - 273.15).toFixed(1)</code></td></tr>
+          <tr><td>5. 返回结果</td><td><code>return `${city} 今日 ${temp}°C`</code></td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">9.5</span> 多工具场景：让 AI 自己选择</div>
+      <p class="body-text">当你定义了多个工具（天气、汇率、搜索），AI 会根据用户问题智能选择调用哪个。</p>
+
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>用户输入</th><th>AI 选择的工具</th><th>参数</th></tr></thead>
+        <tbody>
+          <tr><td>"北京天气怎么样？"</td><td>get_weather</td><td>{ city: "北京" }</td></tr>
+          <tr><td>"100 美元等于多少人民币？"</td><td>get_exchange_rate</td><td>{ from: "USD", to: "CNY" }</td></tr>
+          <tr><td>"搜索 Netlify 教程"</td><td>web_search</td><td>{ query: "Netlify 教程" }</td></tr>
+          <tr><td>"你好"</td><td>（不调用工具，直接回复）</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3"><span class="section-num">9.6</span> 工具调用的最佳实践</div>
+      
+      <div class="section-h4">安全性</div>
+      <ul class="item-list">
+        <li><strong>参数验证</strong>：即使 AI 提取了参数，也要在代码里二次验证（如城市名不能包含 SQL 注入字符）</li>
+        <li><strong>权限控制</strong>：敏感工具（删除文件、发邮件）需要额外确认机制</li>
+        <li><strong>速率限制</strong>：防止用户频繁调用耗尽 API 配额</li>
+      </ul>
+
+      <div class="section-h4">用户体验</div>
+      <ul class="item-list">
+        <li><strong>加载提示</strong>：调用 API 时显示"正在查询天气..."，避免用户以为卡死</li>
+        <li><strong>降级策略</strong>：API 失败时给出友好提示，而非直接报错</li>
+        <li><strong>缓存结果</strong>：同一城市的天气 5 分钟内不重复请求</li>
+      </ul>
+
+      <div class="callout warning">
+        <div class="callout-title">⚠️ 成本控制</div>
+        <p>每次工具调用 = 2 次 AI API 调用（1 次识别工具，1 次总结结果）+ 1 次外部 API。合理设计流程，避免"调用链爆炸"（AI 调工具 A，A 的结果又触发工具 B...）。</p>
+      </div>
+
+      <div class="section-h3"><span class="section-num">9.7</span> 从工具调用到 AI Agent</div>
+      <p class="body-text">工具调用是 Agent 的基石。当你掌握了基础流程，可以继续探索：</p>
+      <ul class="challenge-list">
+        <li><strong>多轮工具链</strong>：先搜索资料，再总结，再生成报告</li>
+        <li><strong>条件判断</strong>：根据工具结果决定下一步（如"天气好 → 推荐户外活动"）</li>
+        <li><strong>并行调用</strong>：同时查天气和汇率，提升效率</li>
+        <li><strong>持久化状态</strong>：记住用户常用城市，下次直接用</li>
+        <li><strong>MCP 集成</strong>：连接 Google Drive/Notion，让 AI 操作真实数据</li>
+      </ul>
+
+      <div class="ornament">✦ ✦ ✦</div>
+      <div style="text-align:center; padding: 20px 0;">
+        <p style="font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);margin-bottom:8px;">🎓 恭喜！你已掌握从静态网页到智能 Agent 的完整路径。</p>
+        <p style="color:var(--muted);font-size:13px;">接下来的挑战：尝试添加更多工具，构建属于你的个性化 AI 助手。</p>
+      </div>
+    </section>
+
+    <!-- TEACHING GUIDE -->
+    <section class="module-section" id="schedule">
+      <div class="module-header">
+        <div class="module-num">教学</div>
+        <div class="module-title-block">
+          <h2 style="font-family:var(--serif);font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-0.01em;">💡 教学建议与学习路径</h2>
+          <p class="module-tagline">顺序引导，报错演示，延伸挑战。</p>
+        </div>
+      </div>
+
+      <div class="section-h3">推荐教学顺序</div>
+      <div class="data-table-wrap"><table class="schedule-table">
+        <thead><tr><th>课时</th><th>教学内容</th><th>学生产出</th></tr></thead>
+        <tbody>
+          <tr><td>第 1 课时</td><td>模块 1：index.html 页面结构</td><td>完成页面基本结构，可在浏览器打开</td></tr>
+          <tr><td>第 2 课时</td><td>模块 2：package.json 依赖管理</td><td>理解 npm 生态与脚本命令</td></tr>
+          <tr><td>第 3 课时</td><td>模块 3：netlify.toml 部署配置</td><td>掌握 TOML 格式与重定向规则</td></tr>
+          <tr><td>第 4 课时</td><td>模块 4：Serverless Function 后端</td><td>实现 AI API 安全调用</td></tr>
+          <tr><td>第 5 课时</td><td>模块 5：README.md 文档编写</td><td>完成完整的项目文档</td></tr>
+          <tr><td>第 6 课时</td><td>模块 6：chat.js 前端交互</td><td>实现完整的聊天 UI 逻辑</td></tr>
+          <tr><td>第 7 课时</td><td>模块 7：GitHub 版本控制</td><td>将项目推送到 GitHub</td></tr>
+          <tr><td>第 8 课时</td><td>模块 8：部署与调试</td><td>应用成功上线并掌握调试技巧</td></tr>
+          <tr><td>第 9～10 课时</td><td>模块 9：工具调用入门（Mock 天气）</td><td>为 AI 添加外部工具能力</td></tr>
+          <tr><td>第 11 课时</td><td>综合实战：报错排查与性能优化</td><td>独立解决 3 个预设 Bug</td></tr>
+          <tr><td>第 12 课时</td><td>毕业项目：添加自定义功能</td><td>完成一个个性化改进（主题切换/持久化/新工具等）</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3" id="errors">关键报错演示（提高容错能力）</div>
+      <div class="data-table-wrap"><table class="data-table">
+        <thead><tr><th>制造的错误</th><th>错误现象</th><th>修复方法</th><th>学习要点</th></tr></thead>
+        <tbody>
+          <tr><td>删除 <code>[[redirects]]</code> 规则</td><td>刷新非首页出现 404</td><td>恢复重定向规则</td><td>SPA 路由原理</td></tr>
+          <tr><td>环境变量名拼写错误</td><td>聊天返回 "API Key 未设置"</td><td>检查 Netlify 变量名</td><td>环境变量调试</td></tr>
+          <tr><td>publish 目录填错</td><td>部署成功但页面空白</td><td>修正 netlify.toml</td><td>构建路径理解</td></tr>
+          <tr><td>JS 文件路径写错</td><td>按钮无反应，控制台 404</td><td>修正 src 路径</td><td>DevTools 使用</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="section-h3" id="challenges">延伸挑战（进阶学生）</div>
+      <ul class="challenge-list">
+        <li>添加深色/浅色主题切换按钮</li>
+        <li>实现消息的 localStorage 持久化（刷新不丢失）</li>
+        <li>为 Serverless Function 添加速率限制（防止 API Key 被刷爆）</li>
+        <li>使用 Netlify Forms 添加用户反馈功能</li>
+        <li>将 DeepSeek 换成 OpenAI，理解不同 API 格式的差异</li>
+      </ul>
+
+      <div class="section-h3" id="resources">核心参考资源汇总</div>
+      <div class="resource-grid">
+        <div class="resource-card"><a href="https://docs.netlify.com" target="_blank"><div class="rc-name">Netlify 官方文档</div><div class="rc-url">docs.netlify.com</div><div class="rc-desc">部署、Functions、环境变量全覆盖</div></a></div>
+        <div class="resource-card"><a href="https://platform.deepseek.com/api-docs/" target="_blank"><div class="rc-name">DeepSeek API 文档</div><div class="rc-url">platform.deepseek.com</div><div class="rc-desc">获取 API Key，查看模型列表与定价</div></a></div>
+        <div class="resource-card"><a href="https://developer.mozilla.org/zh-CN" target="_blank"><div class="rc-name">MDN Web Docs</div><div class="rc-url">developer.mozilla.org/zh-CN</div><div class="rc-desc">HTML/CSS/JS 权威参考，中文版</div></a></div>
+        <div class="resource-card"><a href="https://docs.npmjs.com" target="_blank"><div class="rc-name">npm 文档</div><div class="rc-url">docs.npmjs.com</div><div class="rc-desc">package.json 字段完整说明</div></a></div>
+        <div class="resource-card"><a href="https://shields.io" target="_blank"><div class="rc-name">Shields.io</div><div class="rc-url">shields.io</div><div class="rc-desc">README 徽章生成，支持自定义</div></a></div>
+        <div class="resource-card"><a href="https://www.netlify.com/github-pages-vs-netlify/" target="_blank"><div class="rc-name">Netlify vs GitHub Pages</div><div class="rc-url">netlify.com</div><div class="rc-desc">平台选型对比参考</div></a></div>
+      </div>
+
+      <div class="ornament">· · ·</div>
+      <div style="text-align:center;padding:20px 0 40px;">
+        <p style="font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:10px;">🎉 完成本课程后，你将拥有一个真正上线、全球可访问的 AI 应用。</p>
+        <p style="color:var(--muted);font-size:14px;">这不只是作业，这是你真正意义上的第一个作品集项目。</p>
+      </div>
+    </section>
+
+  </div>
+
+  <footer id="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">GitHub → Netlify</div>
+      <div class="footer-meta">全栈 AI 应用部署实战 · 9 模块 · 12 课时 · DeepSeek API</div>
+    </div>
+  </footer>
+
+</div>
+
+<button id="back-top" title="回到顶部">↑</button>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     AI ASSISTANT WIDGET
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+  /* ── Fab Button ─────────────────────────────────────────────── */
+  #ai-fab {
+    position: fixed;
+    bottom: 32px; right: 88px;
+    width: 52px; height: 52px;
+    background: var(--ink);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 500;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  #ai-fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(0,0,0,0.35); background: var(--accent); }
+  #ai-fab svg { width: 22px; height: 22px; fill: none; stroke: var(--paper); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.2s; }
+  #ai-fab:hover svg { stroke: white; }
+  /* ping dot */
+  #ai-fab::after {
+    content: '';
+    position: absolute; top: 2px; right: 2px;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    animation: ping 2.5s ease-in-out infinite;
+  }
+  #ai-fab.open::after { display: none; }
+  @keyframes ping {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+  }
+
+  /* ── Panel ──────────────────────────────────────────────────── */
+  #ai-panel {
+    position: fixed;
+    bottom: 96px; right: 28px;
+    width: 380px;
+    height: 520px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    display: flex; flex-direction: column;
+    z-index: 499;
+    box-shadow: 0 16px 60px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08);
+    transform: scale(0.92) translateY(16px);
+    opacity: 0;
+    pointer-events: none;
+    transform-origin: bottom right;
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease;
+  }
+  #ai-panel.visible {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ── Panel Header ───────────────────────────────────────────── */
+  #ai-header {
+    padding: 16px 18px 14px;
+    border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; gap: 12px;
+    flex-shrink: 0;
+    background: var(--cream);
+    border-radius: 16px 16px 0 0;
+  }
+  #ai-avatar {
+    width: 34px; height: 34px;
+    background: var(--ink);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  #ai-avatar svg { width: 18px; height: 18px; fill: none; stroke: var(--paper); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .ai-header-text { flex: 1; }
+  .ai-header-name { font-family: var(--serif); font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+  .ai-header-status { font-family: var(--mono); font-size: 10px; color: var(--accent2); letter-spacing: 0.05em; display: flex; align-items: center; gap: 5px; }
+  .ai-status-dot { width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; animation: ping 2s infinite; }
+  #ai-close {
+    width: 28px; height: 28px;
+    background: transparent; border: 1px solid var(--rule);
+    border-radius: 50%; cursor: pointer; color: var(--muted);
+    font-size: 14px; display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  #ai-close:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+  /* ── Messages ───────────────────────────────────────────────── */
+  #ai-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 14px;
+    display: flex; flex-direction: column; gap: 12px;
+    scroll-behavior: smooth;
+  }
+  #ai-messages::-webkit-scrollbar { width: 3px; }
+  #ai-messages::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+  .ai-msg {
+    display: flex; gap: 8px; align-items: flex-end;
+    animation: msgIn 0.2s ease both;
+  }
+  @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .ai-msg.user { flex-direction: row-reverse; }
+
+  .ai-msg-bubble {
+    max-width: 82%;
+    padding: 9px 13px;
+    border-radius: 14px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .ai-msg.bot .ai-msg-bubble {
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    border-bottom-left-radius: 4px;
+  }
+  .ai-msg.user .ai-msg-bubble {
+    background: var(--ink);
+    color: var(--paper);
+    border-bottom-right-radius: 4px;
+  }
+  .ai-msg.error .ai-msg-bubble {
+    background: rgba(192,57,43,0.08);
+    border: 1px solid rgba(192,57,43,0.25);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11.5px;
+  }
+
+  .ai-msg-icon {
+    width: 24px; height: 24px; flex-shrink: 0;
+    background: var(--ink); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ai-msg-icon svg { width: 13px; height: 13px; fill: none; stroke: var(--paper); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ai-msg.user .ai-msg-icon { background: var(--muted); }
+
+  /* Typing indicator */
+  .ai-typing { display: flex; gap: 4px; padding: 10px 14px; }
+  .ai-typing span { width: 6px; height: 6px; background: var(--muted); border-radius: 50%; animation: typeBounce 1.1s ease-in-out infinite; }
+  .ai-typing span:nth-child(2) { animation-delay: 0.15s; }
+  .ai-typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes typeBounce { 0%,80%,100%{transform:scale(0.7);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+
+  /* Quick chips */
+  #ai-chips {
+    padding: 0 14px 10px;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .ai-chip {
+    font-family: var(--mono); font-size: 10.5px;
+    padding: 4px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    cursor: pointer; color: var(--muted);
+    background: transparent;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .ai-chip:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ── Input Area ─────────────────────────────────────────────── */
+  #ai-input-row {
+    padding: 12px 14px;
+    border-top: 1px solid var(--rule);
+    display: flex; gap: 8px; align-items: flex-end;
+    flex-shrink: 0;
+    background: var(--cream);
+    border-radius: 0 0 16px 16px;
+  }
+  #ai-input {
+    flex: 1;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-family: var(--sans); font-size: 13px;
+    color: var(--ink);
+    resize: none; outline: none;
+    min-height: 38px; max-height: 100px;
+    transition: border-color 0.2s;
+    line-height: 1.5;
+  }
+  #ai-input::placeholder { color: var(--muted); }
+  #ai-input:focus { border-color: var(--accent); }
+  #ai-send {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: var(--accent); border: none; border-radius: 10px;
+    color: white; cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  #ai-send:hover { opacity: 0.85; transform: scale(1.05); }
+  #ai-send:disabled { opacity: 0.35; transform: none; cursor: not-allowed; }
+  #ai-send svg { width: 15px; height: 15px; fill: none; stroke: white; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Voice buttons */
+  .ai-voice-btn {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: var(--paper); border: 1px solid var(--rule);
+    border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .ai-voice-btn svg { width: 16px; height: 16px; fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.2s; }
+  .ai-voice-btn:hover { background: var(--cream); }
+  .ai-voice-btn:hover svg { stroke: var(--accent); }
+  .ai-voice-btn.active { background: var(--accent); border-color: var(--accent); animation: voicePulse 1.5s ease-in-out infinite; }
+  .ai-voice-btn.active svg { stroke: white; }
+  @keyframes voicePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  /* TTS speaking indicator */
+  .ai-msg-bubble.speaking { position: relative; }
+  .ai-msg-bubble.speaking::after {
+    content: '🔊';
+    position: absolute; top: -4px; right: -4px;
+    font-size: 12px;
+    animation: speakerPulse 0.8s ease-in-out infinite;
+  }
+  @keyframes speakerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  /* TTS button inside message bubble */
+  .ai-msg.bot { position: relative; }
+  .ai-msg-bubble { 
+    position: relative; 
+    padding-right: 32px; /* Make room for TTS button */
+  }
+  .ai-msg-tts {
+    position: absolute; 
+    top: 8px; 
+    right: 8px;
+    width: 22px; 
+    height: 22px;
+    background: rgba(255,255,255,0.95); 
+    border: 1px solid rgba(0,0,0,0.15);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 4px; 
+    cursor: pointer;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    transition: all 0.2s;
+    opacity: 0;
+    z-index: 10;
+  }
+  .ai-msg.bot:hover .ai-msg-tts { opacity: 1; }
+  .ai-msg-tts svg { 
+    width: 12px; 
+    height: 12px; 
+    fill: none; 
+    stroke: var(--ink); 
+    stroke-width: 2; 
+  }
+  .ai-msg-tts:hover { 
+    background: var(--accent); 
+    border-color: var(--accent);
+    transform: scale(1.1);
+  }
+  .ai-msg-tts:hover svg { stroke: white; }
+  .ai-msg-tts.speaking { 
+    opacity: 1 !important; 
+    background: var(--accent); 
+    border-color: var(--accent);
+    animation: ttsPulse 1s ease-in-out infinite;
+  }
+  .ai-msg-tts.speaking svg { stroke: white; }
+  @keyframes ttsPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* ── Mobile ─────────────────────────────────────────────────── */
+  @media (max-width: 500px) {
+    #ai-panel { right: 12px; left: 12px; width: auto; bottom: 88px; }
+    #ai-fab { right: 20px; bottom: 24px; }
+    #back-top { right: 76px; bottom: 24px; }
+    /* Always show TTS button on mobile (no hover) */
+    .ai-msg-tts { opacity: 0.7; }
+    .ai-msg-tts.speaking { opacity: 1; }
+  }
+  /* Touch devices: always show TTS button */
+  @media (hover: none) {
+    .ai-msg-tts { opacity: 0.7; }
+  }
+</style>
+
+<!-- FAB trigger button -->
+<button id="ai-fab" title="问 AI 助手" aria-label="打开 AI 助手">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/></svg>
+</button>
+
+<!-- Chat panel -->
+<div id="ai-panel" role="dialog" aria-label="AI 助手">
+
+  <div id="ai-header">
+    <div id="ai-avatar">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><path d="M18 3l1.5 1.5M20 6h2M18 9l1.5-1.5"/></svg>
+    </div>
+    <div class="ai-header-text">
+      <div class="ai-header-name">部署助手</div>
+      <div class="ai-header-status"><span class="ai-status-dot"></span>由 DeepSeek 驱动</div>
+    </div>
+    <button id="ai-close" title="关闭">✕</button>
+  </div>
+
+  <div id="ai-messages">
+    <!-- Welcome message injected by JS -->
+  </div>
+
+  <!-- Quick question chips -->
+  <div id="ai-chips">
+    <button class="ai-chip" data-q="什么是 Serverless？">什么是 Serverless？</button>
+    <button class="ai-chip" data-q="API Key 为何不能放前端？">API Key 安全</button>
+    <button class="ai-chip" data-q="netlify.toml 怎么配置重定向？">404 重定向</button>
+    <button class="ai-chip" data-q="npm install 和 npm install --save-dev 有什么区别？">依赖区别</button>
+  </div>
+
+  <div id="ai-input-row">
+    <button id="ai-voice-input" class="ai-voice-btn" title="语音输入（点击说话）">
+      <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    </button>
+    <textarea id="ai-input" placeholder="问我任何关于部署的问题…" rows="1"></textarea>
+    <button id="ai-send" title="发送">
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+
+</div>
+
+<script>
+  /* ── Existing page scripts ──────────────────────────────────── */
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    bar.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+  });
+  const backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', () => backTop.classList.toggle('visible', window.scrollY > 400));
+  backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  const navLinks = document.querySelectorAll('#sidebar nav a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id)); });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  document.querySelectorAll('[id]').forEach(s => observer.observe(s));
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menu-toggle');
+  toggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+  navLinks.forEach(a => a.addEventListener('click', () => { if (window.innerWidth < 900) sidebar.classList.remove('open'); }));
+  const modObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.style.animationPlayState = 'running'; modObs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.module-section').forEach(m => modObs.observe(m));
+
+  /* ── AI Assistant ───────────────────────────────────────────── */
+  const fab      = document.getElementById('ai-fab');
+  const panel    = document.getElementById('ai-panel');
+  const closeBtn = document.getElementById('ai-close');
+  const msgBox   = document.getElementById('ai-messages');
+  const input    = document.getElementById('ai-input');
+  const sendBtn  = document.getElementById('ai-send');
+  const chips    = document.querySelectorAll('.ai-chip');
+  const voiceBtn = document.getElementById('ai-voice-input');
+
+  // Conversation history sent to backend
+  let history = [];
+  let isOpen  = false;
+
+  // Voice features
+  let recognition = null;
+  let synthesis = window.speechSynthesis;
+  let isListening = false;
+  let currentUtterance = null;
+
+  // Debug: Check if TTS is available
+  console.log('🔊 TTS 可用:', !!synthesis);
+  if (synthesis) {
+    console.log('🎤 可用语音:', synthesis.getVoices().length);
+  }
+
+  // Initialize Speech Recognition (STT)
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.lang = 'zh-CN';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      input.value = transcript;
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+      voiceBtn.classList.remove('active');
+      isListening = false;
+      // Auto-send after voice input
+      setTimeout(() => sendMessage(transcript), 300);
+    };
+
+    recognition.onerror = (e) => {
+      console.error('语音识别错误:', e.error);
+      voiceBtn.classList.remove('active');
+      isListening = false;
+      if (e.error === 'no-speech') {
+        addErrorMsg('未检测到语音，请重试');
+      } else if (e.error === 'not-allowed') {
+        addErrorMsg('需要麦克风权限才能使用语音输入');
+      }
+    };
+
+    recognition.onend = () => {
+      voiceBtn.classList.remove('active');
+      isListening = false;
+    };
+  } else {
+    // Hide voice button if not supported
+    if (voiceBtn) voiceBtn.style.display = 'none';
+  }
+
+  // System context — tells DeepSeek it's a teaching assistant for this course
+  const SYSTEM = `你是本教学大纲网站的 AI 助手，专门帮助初学者理解"从 GitHub 到 Netlify 部署 AI 聊天应用"的全流程。
+本课程涵盖 5 个核心文件：index.html、package.json、netlify.toml、netlify/functions/chat.js、README.md。
+使用的 AI API 是 DeepSeek。
+请用简洁易懂的中文回答，适当使用代码示例。遇到与课程无关的问题也可友好作答，但优先聚焦部署相关内容。`;
+
+  // ── Toggle panel ──
+  function togglePanel() {
+    isOpen = !isOpen;
+    panel.classList.toggle('visible', isOpen);
+    fab.classList.toggle('open', isOpen);
+    if (isOpen) {
+      if (msgBox.children.length === 0) addWelcome();
+      setTimeout(() => input.focus(), 300);
+    }
+  }
+
+  fab.addEventListener('click', e => {
+    e.stopPropagation();
+    togglePanel();
+  });
+  closeBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    togglePanel();
+  });
+
+  // Close on outside click (only when open, ignoring fab itself)
+  document.addEventListener('click', e => {
+    if (isOpen && !panel.contains(e.target) && !fab.contains(e.target)) {
+      togglePanel();
+    }
+  });
+
+  // ── Welcome message ──
+  function addWelcome() {
+    addBotMsg('👋 你好！我是本课程的 AI 部署助手。\n\n无论是 Serverless、环境变量、npm 依赖，还是 Netlify 配置，随时问我！也可以点击下面的快捷问题开始。');
+  }
+
+  // ── Render helpers ──
+  function addBotMsg(text) {
+    const row = document.createElement('div');
+    row.className = 'ai-msg bot';
+    const plainText = text.replace(/\*\*(.+?)\*\*/g, '$1').replace(/`([^`]+)`/g, '$1'); // Strip markdown for TTS
+    row.innerHTML = `
+      <div class="ai-msg-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="ai-msg-bubble" data-text="${escHtml(plainText)}">
+        ${formatMsg(text)}
+        <button class="ai-msg-tts" title="朗读此消息">
+          <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>`;
+    msgBox.appendChild(row);
+    
+    // Add TTS click handler
+    const ttsBtn = row.querySelector('.ai-msg-tts');
+    const bubble = row.querySelector('.ai-msg-bubble');
+    if (ttsBtn && synthesis) {
+      ttsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        speakText(bubble.dataset.text, ttsBtn, bubble);
+      });
+    }
+    
+    scrollBottom();
+    return row;
+  }
+
+  function addUserMsg(text) {
+    const row = document.createElement('div');
+    row.className = 'ai-msg user';
+    row.innerHTML = `
+      <div class="ai-msg-bubble">${escHtml(text)}</div>
+      <div class="ai-msg-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>`;
+    msgBox.appendChild(row);
+    scrollBottom();
+  }
+
+  function addTyping() {
+    const row = document.createElement('div');
+    row.className = 'ai-msg bot';
+    row.id = 'ai-typing-row';
+    row.innerHTML = `
+      <div class="ai-msg-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="ai-msg-bubble ai-typing"><span></span><span></span><span></span></div>`;
+    msgBox.appendChild(row);
+    scrollBottom();
+  }
+
+  function removeTyping() {
+    const el = document.getElementById('ai-typing-row');
+    if (el) el.remove();
+  }
+
+  function addErrorMsg(text) {
+    const row = document.createElement('div');
+    row.className = 'ai-msg error';
+    row.innerHTML = `<div class="ai-msg-bubble">⚠ ${escHtml(text)}</div>`;
+    msgBox.appendChild(row);
+    scrollBottom();
+  }
+
+  function scrollBottom() { msgBox.scrollTop = msgBox.scrollHeight; }
+
+  // Escape HTML to prevent XSS
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Light Markdown-ish formatting: **bold**, `code`, newlines
+  function formatMsg(text) {
+    return escHtml(text)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/`([^`]+)`/g, '<code style="font-family:var(--mono);font-size:11.5px;background:rgba(0,0,0,0.08);padding:1px 4px;border-radius:3px;color:var(--accent)">$1</code>')
+      .replace(/\n/g, '<br/>');
+  }
+
+  // ── Send message ──
+  async function sendMessage(text) {
+    text = text.trim();
+    if (!text || sendBtn.disabled) return;
+
+    // Hide chips after first real use
+    document.getElementById('ai-chips').style.display = 'none';
+
+    addUserMsg(text);
+    input.value = '';
+    input.style.height = 'auto';
+    sendBtn.disabled = true;
+
+    history.push({ role: 'user', content: text });
+    addTyping();
+
+    try {
+      const res = await fetch('/.netlify/functions/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system: SYSTEM,
+          messages: history
+        })
+      });
+
+      removeTyping();
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      const reply = data.reply || '（未收到回复）';
+      history.push({ role: 'assistant', content: reply });
+      addBotMsg(reply);
+
+    } catch (err) {
+      removeTyping();
+      addErrorMsg(`请求失败：${err.message}`);
+      history.pop(); // remove failed user message from history
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  // ── Event listeners ──
+  sendBtn.addEventListener('click', () => sendMessage(input.value));
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input.value); }
+  });
+
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+  });
+
+  chips.forEach(c => c.addEventListener('click', () => {
+    sendMessage(c.dataset.q);
+  }));
+
+  // ── Voice Input (STT) ──
+  if (voiceBtn && recognition) {
+    voiceBtn.addEventListener('click', () => {
+      if (isListening) {
+        // Stop listening
+        recognition.stop();
+        voiceBtn.classList.remove('active');
+        isListening = false;
+      } else {
+        // Start listening
+        try {
+          recognition.start();
+          voiceBtn.classList.add('active');
+          isListening = true;
+        } catch (e) {
+          console.error('无法启动语音识别:', e);
+          addErrorMsg('语音识别启动失败，请检查麦克风权限');
+        }
+      }
+    });
+  }
+
+  // ── Text-to-Speech (TTS) ──
+  function speakText(text, ttsBtn, bubble) {
+    console.log('🔊 TTS 被点击, text:', text ? text.substring(0, 50) : 'empty');
+    
+    if (!synthesis) {
+      console.error('❌ synthesis 不可用');
+      return;
+    }
+
+    // Check if this button is currently speaking
+    const isCurrentlySpeaking = ttsBtn.classList.contains('speaking');
+    
+    // Always stop any current speech first
+    if (synthesis.speaking || currentUtterance) {
+      console.log('⏸️ 停止当前播放');
+      synthesis.cancel();
+      
+      // Clean up all speaking states
+      document.querySelectorAll('.ai-msg-tts.speaking').forEach(b => b.classList.remove('speaking'));
+      document.querySelectorAll('.ai-msg-bubble.speaking').forEach(b => b.classList.remove('speaking'));
+      currentUtterance = null;
+      
+      // If clicking the same button that's playing, just stop (don't restart)
+      if (isCurrentlySpeaking) {
+        console.log('✅ 已停止播放（点击同一按钮）');
+        return;
+      }
+    }
+
+    if (!text || text.trim() === '') {
+      console.error('❌ 文本为空');
+      return;
+    }
+
+    // Create new utterance
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'zh-CN';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    // Find Chinese voice if available
+    const voices = synthesis.getVoices();
+    console.log('🎤 可用语音数量:', voices.length);
+    const zhVoice = voices.find(v => v.lang.startsWith('zh'));
+    if (zhVoice) {
+      utterance.voice = zhVoice;
+      console.log('✅ 使用中文语音:', zhVoice.name);
+    } else {
+      console.log('⚠️ 未找到中文语音，使用默认');
+    }
+
+    utterance.onstart = () => {
+      console.log('▶️ 开始播放');
+      ttsBtn.classList.add('speaking');
+      bubble.classList.add('speaking');
+    };
+
+    utterance.onend = () => {
+      console.log('⏹️ 播放结束');
+      ttsBtn.classList.remove('speaking');
+      bubble.classList.remove('speaking');
+      currentUtterance = null;
+    };
+
+    utterance.onpause = () => {
+      console.log('⏸️ 播放暂停');
+      ttsBtn.classList.remove('speaking');
+      bubble.classList.remove('speaking');
+      currentUtterance = null;
+    };
+
+    utterance.onerror = (e) => {
+      console.error('❌ TTS 错误:', e);
+      ttsBtn.classList.remove('speaking');
+      bubble.classList.remove('speaking');
+      currentUtterance = null;
+    };
+
+    currentUtterance = utterance;
+    console.log('🎵 开始朗读...');
+    
+    // Add small delay to ensure synthesis is ready
+    setTimeout(() => {
+      synthesis.speak(utterance);
+    }, 50);
+  }
+
+  // Load voices (needed for some browsers)
+  if (synthesis) {
+    if (synthesis.onvoiceschanged !== undefined) {
+      synthesis.onvoiceschanged = () => synthesis.getVoices();
+    }
+  }
+
+  // Stop speech when closing panel
+  const originalToggle = togglePanel;
+  togglePanel = function() {
+    if (isOpen && synthesis && currentUtterance) {
+      synthesis.cancel();
+      currentUtterance = null;
+      document.querySelectorAll('.ai-msg-tts.speaking').forEach(b => b.classList.remove('speaking'));
+      document.querySelectorAll('.ai-msg-bubble.speaking').forEach(b => b.classList.remove('speaking'));
+    }
+    originalToggle();
+  };
+</script>
+</body>
+</html>

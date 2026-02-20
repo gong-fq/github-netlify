@@ -1,0 +1,35 @@
+{
+  "name": "ai-chat-app",
+  "version": "1.0.0",
+  "description": "一个部署在 Netlify 上的 AI 聊天应用，使用 Serverless Functions 安全调用 DeepSeek API。",
+  "private": true,
+
+  "scripts": {
+    "build": "echo '✅ 纯静态前端，无需构建步骤。Netlify 将直接发布 publish 目录。'",
+    "dev": "netlify dev",
+    "lint": "echo '（可选）在此添加代码检查命令'"
+  },
+
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  },
+
+  "engines": {
+    "node": ">=18.0.0"
+  },
+
+  "keywords": ["netlify", "serverless", "deepseek", "ai", "chatbot"],
+  "author": "Your Name <you@example.com>",
+  "license": "MIT",
+
+  "_comment_教学说明": {
+    "dependencies": "运行时需要的包，Netlify 会在构建时通过 npm install 自动安装",
+    "devDependencies": "仅本地开发需要，netlify-cli 让你在本地模拟 Netlify 环境（运行 npm run dev）",
+    "scripts.build": "Netlify 会执行这条命令。对于纯静态项目可留空，对于 React/Vue 项目这里写 npm run build",
+    "engines.node": "指定 Node 版本，Netlify 会据此选择运行时，DeepSeek API 需要 Node 18+"
+  }
+}
